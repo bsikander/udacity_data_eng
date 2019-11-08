@@ -23,7 +23,7 @@ class Postgres:
             print("Error: Could not make connection to the Postgres database")
             print(e)
 
-    def run(query):
+    def run(self, query):
         try:
             cur = self.conn.cursor()
             cur.execute(query)
@@ -32,7 +32,6 @@ class Postgres:
 
 
 pg_conn = Postgres().connect()
-pg_conn.run("CREATE DATABASE default;")
 
 create_table_sql = """
     CREATE TABLE IF NOT EXISTS songs (
@@ -47,20 +46,19 @@ pg_conn.run(create_table_sql)
 
 insert_table_sql = """
     INSERT INTO songs (song_title, artist_name, year, albumn_name, single)
-    VALUES ($song_title, $artist_name, $year, $albumn_name, $single)
+    VALUES ('$song_title', '$artist_name', '$year', '$albumn_name', '$single')
 """
 
 
 def get_insert_dml(row):
     tmpl = Template(insert_table_sql)
-    tmpl.substitue(
+    return tmpl.substitue(
         song_title=row[0],
         artist_name=row[1],
         year=row[2],
         albumn_name=row[3],
         single=row[4],
     )
-    return tmpl
 
 
 data = (
