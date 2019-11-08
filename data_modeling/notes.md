@@ -1,3 +1,5 @@
+## Relational Databases
+
 ### ACID transactions
 
 #### Atomicity:
@@ -15,3 +17,32 @@
 - Completed transactions are saved to database even in cases of system failure.
 - A commonly cited example includes tracking flight seat bookings. So once the flight booking records a confirmed seat booking, the seat remains booked even if a system failure occurs. Source: Wikipedia.
 
+## NoSQL Databases
+
+Common types of NoSQL databases:
+- Apache Cassandra (Partition Row store)
+- MongoDB (Document store)
+- DynamoDB (Key-Value store)
+- Apache HBase (Wide Column store)
+- Neo4j (Graph Database)
+
+### Cassandra
+- **keyspace**: collection of tables
+- **table**: a group of partitions
+- **rows**: a single item
+- **partition**:
+  - fundamental unit of access
+  - collection of row(s)
+  - how data is distributed
+- **primary key**: made up of a partition key and clustering columns
+- **column**:
+  - *clustering* columns and *data* columns
+  - labeled element
+
+**Q: What type of companies use Apache Cassandra?**
+
+All kinds of companies. For example, Uber uses Apache Cassandra for their entire backend. Netflix uses Apache Cassandra to serve all their videos to customers. Good use cases for NoSQL (and more specifically Apache Cassandra) are:
+- Transaction logging (retail, health care)
+- Internet of Things (IoT)
+- Time series data
+- Any workload that is heavy on writes to the database (since Apache Cassandra is optimized for writes).
