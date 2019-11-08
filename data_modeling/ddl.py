@@ -2,9 +2,18 @@ import psycopg2
 from string import Template
 from functional import seq
 
+
 class Postgres:
-    def __init__(self, host: str = "127.0.0.1", dbname: str = "default", user: str = 'student', password: str = 'student'):
-        self.conn_params = f"host={host} dbname={dbname} user={user} password={password}"
+    def __init__(
+        self,
+        host: str = "127.0.0.1",
+        dbname: str = "default",
+        user: str = "student",
+        password: str = "student",
+    ):
+        self.conn_params = (
+            f"host={host} dbname={dbname} user={user} password={password}"
+        )
 
     def connect(self):
         try:
@@ -41,17 +50,26 @@ insert_table_sql = """
     VALUES ($song_title, $artist_name, $year, $albumn_name, $single)
 """
 
+
 def get_insert_dml(row):
     tmpl = Template(insert_table_sql)
-    tmpl.substitue(song_title=row[0], artist_name=row[1], year=row[2], albumn_name=row[3], single=row[4])
+    tmpl.substitue(
+        song_title=row[0],
+        artist_name=row[1],
+        year=row[2],
+        albumn_name=row[3],
+        single=row[4],
+    )
     return tmpl
+
 
 data = (
     ["Across The Universe", "The Beatles", "1970", "Let It Be", "False"],
     ["Think For Yourself", "The Beatles", "1965", "Rubber Soul", "False"],
 )
 
-(seq(data)
+(
+    seq(data)
     .map(lambda row: get_insert_dml(row))
     .map(lambda insert_sql: pg_conn.run(insert_sql))
 )
