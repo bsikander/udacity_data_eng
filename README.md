@@ -7,7 +7,9 @@ this repo contains my study notes for udacity's [data engineering nanodegree pro
 #### quick links
 - [postgres on mac](https://www.codementor.io/engineerapart/getting-started-with-postgresql-on-mac-osx-are8jcopb)
   - postgres [data types](https://www.postgresql.org/docs/9.5/datatype.html)
-- [starter tutorial on **psycopg2**](https://pynative.com/python-postgresql-tutorial/)
+  - [starter tutorial on **psycopg2**](https://pynative.com/python-postgresql-tutorial/)
+- [cassandra - installing](http://cassandra.apache.org/doc/latest/getting_started/installing.html)
+  - [cassandra on mac](https://gist.github.com/hkhamm/a9a2b45dd749e5d3b3ae)
 
 
 ## cloud data warehouses
