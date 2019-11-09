@@ -1,6 +1,6 @@
-## Relational Databases
+# Relational Databases
 
-### ACID transactions
+## ACID transactions
 
 - **Atomicity**:
   - The whole transaction is processed or nothing is processed.
@@ -18,7 +18,7 @@
 - A commonly cited example includes tracking flight seat bookings. So once the flight booking records a confirmed seat booking, the seat remains booked even if a system failure occurs. Source: Wikipedia.
 
 
-### OLAP vs. OLTP
+## OLAP vs. OLTP
 
 - **Online Analytical Processing (OLAP)**:
   * Databases optimized for these workloads allow for complex analytical and ad hoc queries, including **aggregations**. These type of databases are optimized for reads.
@@ -28,9 +28,9 @@
 
 The key to remember the difference between OLAP and OLTP is **analytics (A)** vs **transactions (T)**. If you want to get the price of a shoe then you are using OLTP (this has very little or no aggregations). If you want to know the total stock of shoes a particular store sold, then this requires using OLAP (since this will require aggregations). Ref https://stackoverflow.com/questions/21900185/what-are-oltp-and-olap-what-is-the-difference-between-them
 
-### Structuring your data
+## Structuring your data
 
-#### Normalization
+### Normalization
 - To *reduce data redunancy* and *increase data integrity*
 - Objective of **normal form**:
     * To free the db from unwanted insertions, updates, and deletion dependencies
@@ -55,11 +55,19 @@ The key to remember the difference between OLAP and OLTP is **analytics (A)** vs
 - When to use 3NF: when you want to update data, we want to be able to do in just 1 place.
 
 
-
-#### Denormalization
+### Denormalization
 - Must be done in read heavy workloads to increase performance. 
+  * reads will be faster (select)
+  * writes will be slower (insert, update, delete)
 
-## NoSQL Databases
+#### Fact and Dimension Tables
+
+#### Star Schemas
+
+#### Snowflake Schemas
+
+
+# NoSQL Databases
 
 Common types of NoSQL databases:
 - Apache Cassandra (Partition Row store)
@@ -68,7 +76,7 @@ Common types of NoSQL databases:
 - Apache HBase (Wide Column store)
 - Neo4j (Graph Database)
 
-### Cassandra
+## Cassandra
 - **keyspace**: collection of tables
 - **table**: a group of partitions
 - **rows**: a single item
