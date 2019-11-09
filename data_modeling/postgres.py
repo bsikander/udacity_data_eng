@@ -7,7 +7,7 @@ class Postgres:
     def __init__(
         self,
         host: str = "127.0.0.1",
-        dbname: str = "default",
+        dbname: str = "defaultdb",
         user: str = "student",
         password: str = "student",
     ):
@@ -44,15 +44,15 @@ create_table_sql = """
 """
 pg_conn.run(create_table_sql)
 
-insert_table_sql = """
+insert_sql = """
     INSERT INTO songs (song_title, artist_name, year, albumn_name, single)
-    VALUES ('$song_title', '$artist_name', '$year', '$albumn_name', '$single')
+    VALUES ('$song_title', '$artist_name', $year, '$albumn_name', $single)
 """
 
 
 def get_insert_dml(row):
-    tmpl = Template(insert_table_sql)
-    return tmpl.substitue(
+    tmpl = Template(insert_sql)
+    return tmpl.substitute(
         song_title=row[0],
         artist_name=row[1],
         year=row[2],

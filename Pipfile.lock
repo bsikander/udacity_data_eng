@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e064f398fa0209f240399d23811d3001d04a7208e8bf2a02011891f9cf44556a"
+            "sha256": "2f088162296b5f83ae8f5f9e930c5e97d69fb163cc5ffd767d7a0b6da7134b46"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,6 +16,13 @@
         ]
     },
     "default": {
+        "cassandra-driver": {
+            "hashes": [
+                "sha256:80c7ef27834d730e85bb8074309526f40032c7eeac20884701941dbb01586203"
+            ],
+            "index": "pypi",
+            "version": "==3.20.1"
+        },
         "dill": {
             "hashes": [
                 "sha256:97fd758f5fe742d42b11ec8318ecfcff8776bccacbfcec05dfd6276f5d450f73"

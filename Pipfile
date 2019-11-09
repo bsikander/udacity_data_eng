@@ -17,6 +17,7 @@ pre-commit = "*"
 
 [packages]
 pyfunctional = "*"
+cassandra-driver = "*"
 
 [requires]
 python_version = "3.6"
