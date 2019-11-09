@@ -65,7 +65,11 @@ All kinds of companies. For example, Uber uses Apache Cassandra for their entire
 - When you need **ACID Transactions**:
   * If you need a consistent database with ACID transactions, then most NoSQL databases will not be able to serve this need.
   * NoSQL database are **eventually consistent** and do not provide ACID transactions.
-  * However, there are exceptions to it. Some non-relational databases like MongoDB can support ACID transactions.
+  * There are some NoSQL databases that offer some form of ACID transaction.
+    - As of v4.0, **MongoDB** added multi-document ACID transactions within a single replica set. With their later version, v4.2, they have added multi-document ACID transactions in a sharded/partitioned deployment.
+      * [MongoDB on multi-document ACID transactions](https://www.mongodb.com/collateral/mongodb-multi-document-acid-transactions)
+      * Another post on [MongoDB's ability to handle ACID transactions](https://www.mongodb.com/blog/post/mongodb-multi-document-acid-transactions-general-availability)
+    - Another example of a NoSQL database supporting ACID transactions is **MarkLogic**.
 - When you need the ability to **do JOINS across tables**: NoSQL does not allow the ability to do JOINS. This is not allowed as this will result in *full table scans*.
 - If you want to be able to do **aggregations and analytics**
 - If you have **changing business requirements**: Ad-hoc queries are possible but difficult as the data model was done to fix particular queries
