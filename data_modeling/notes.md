@@ -59,3 +59,14 @@ All kinds of companies. For example, Uber uses Apache Cassandra for their entire
   * While ACID transactions bring benefits they also slow down the process of reading and writing data.
 - **Need a flexible schema**: flexible schema can allow for columns to be added that do not have to be used by every row, saving disk space.
 - **Need high availability**: Relational databases have a single point of failure. When that database goes down, a failover to a backup system must happen and takes time.
+
+**Q: When NOT to use a NoSQL Database?**
+- When you have **a small dataset**: NoSQL databases were made for big datasets not small datasets and while it works it wasn’t created for that.
+- When you need **ACID Transactions**:
+ * If you need a consistent database with ACID transactions, then most NoSQL databases will not be able to serve this need. 
+ * NoSQL database are **eventually consistent** and do not provide ACID transactions.
+ * However, there are exceptions to it. Some non-relational databases like MongoDB can support ACID transactions.
+- When you need the ability to **do JOINS across tables**: NoSQL does not allow the ability to do JOINS. This is not allowed as this will result in *full table scans*.
+- If you want to be able to do **aggregations and analytics**
+- If you have **changing business requirements**: Ad-hoc queries are possible but difficult as the data model was done to fix particular queries
+- If your queries are not available and you need the flexibility: You need your queries in advance. If those are not available or you will need to be able to have flexibility on how you query your data you might need to stick with a relational database
