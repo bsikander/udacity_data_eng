@@ -47,7 +47,7 @@ All kinds of companies. For example, Uber uses Apache Cassandra for their entire
 - Time series data
 - Any workload that is heavy on writes to the database (since Apache Cassandra is optimized for writes).
 
-**Q: WHen to use a NoSQL database?**
+**Q: When to use a NoSQL database?**
 - **Needs to be able to store different data type formats**
   * NoSQL was also to handle different data configurations: structured, semi-structured, and unstructured data. 
   * JSON, XML documents can all be handled easily with NoSQL
