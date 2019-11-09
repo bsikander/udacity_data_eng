@@ -46,3 +46,16 @@ All kinds of companies. For example, Uber uses Apache Cassandra for their entire
 - Internet of Things (IoT)
 - Time series data
 - Any workload that is heavy on writes to the database (since Apache Cassandra is optimized for writes).
+
+**Q: WHen to use a NoSQL database?**
+- **Needs to be able to store different data type formats**
+  * NoSQL was also to handle different data configurations: structured, semi-structured, and unstructured data. 
+  * JSON, XML documents can all be handled easily with NoSQL
+- **Large amounts of data**
+  * Relational databases are not distributed databases and b/c of this they can only scale vertically by addming more storage in the machine itself.
+  * NoSQL databases were created to be able to be **horizontally scalable** - the more servers/systems you add to the database the more data that can be ahosted with **high availability** and **low latency** (fast reads and writes). 
+- **Need horizontal scalability**  
+- **Need high throughput**
+  * While ACID transactions bring benefits they also slow down the process of reading and writing data.
+- **Need a flexible schema**: flexible schema can allow for columns to be added that do not have to be used by every row, saving disk space.
+- **Need high availability**: Relational databases have a single point of failure. When that database goes down, a failover to a backup system must happen and takes time.
