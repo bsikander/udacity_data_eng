@@ -26,7 +26,9 @@
 - **Online Transactional Processing (OLTP)**:
   * Databases optimized for these workloads allow for less complex queries in large volume. The types of queries for these databases are read, insert, update, and delete.
 
-The key to remember the difference between OLAP and OLTP is **analytics (A)** vs **transactions (T)**. If you want to get the price of a shoe then you are using OLTP (this has very little or no aggregations). If you want to know the total stock of shoes a particular store sold, then this requires using OLAP (since this will require aggregations). Ref https://stackoverflow.com/questions/21900185/what-are-oltp-and-olap-what-is-the-difference-between-them
+The key to remember the difference between OLAP and OLTP is **analytics (A)** vs **transactions (T)**. If you want to get the price of a shoe then you are using OLTP (this has very little or no aggregations). If you want to know the total stock of shoes a particular store sold, then this requires using OLAP (since this will require aggregations). 
+
+Read [stackoverflow reference](https://stackoverflow.com/questions/21900185/what-are-oltp-and-olap-what-is-the-difference-between-them)
 
 ## Structuring your data
 
@@ -62,10 +64,33 @@ The key to remember the difference between OLAP and OLTP is **analytics (A)** vs
 
 #### Fact and Dimension Tables
 
-#### Star Schemas
+**Fact table** consists of the measurements, metrics, or facts of a business process. 
+**Dimensions** are **people**, **products**, **place**, and **time**. 
 
-#### Snowflake Schemas
+#### Star Schema
+- the simplest style of *data mart* schema. 
+- consists of one or more fact tables referencing any number of dimension tables.
+  * fact table is at the center
+  * dimension table surrounds the fact table representing the star's points
+- **benefits**:
+  * denormalized
+  * simplifies queries
+  * fast aggregations
+- **drawbacks**: 
+  * issues that come with denormalization, e.g.
+    - data integrity (duplicate data across multiple tables)
+    - decreased query flexibility
+    - many to many relationship (simplified)
 
+#### Snowflake Schema
+- "a complex snowflake shape emerges when the dimensions of a snowflake schema are elaborated, having multiple levels of relationships, child tables having multiple parents."
+
+**Snowflake vs. Star**
+- Star schema is a special, simplified case of the snowflake schema.
+- Star schema does not allow for one to many relationships while the snowflake schema does.
+- Snowflake schema is more normalized than start schema but only in 1NF or 2NF.
+
+Ref [Deep Diving in the World of Data Warehousing](https://medium.com/@BluePi_In/deep-diving-in-the-world-of-data-warehousing-78c0d52f49a)
 
 # NoSQL Databases
 
