@@ -2,20 +2,32 @@
 
 ### ACID transactions
 
-#### Atomicity:
-- The whole transaction is processed or nothing is processed.
-- A commonly cited example of an atomic transaction is money transactions between two bank accounts. The transaction of transferring money from one account to the other is made up of two operations. First, you have to withdraw money in one account, and second you have to save the withdrawn money to the second account. An atomic transaction, i.e., when either all operations occur or nothing occurs, keeps the database in a consistent state. This ensures that if either of those two operations (withdrawing money from the 1st account or saving the money to the 2nd account) fail, the money is neither lost nor created. Source Wikipedia for a detailed description of this example.
+- **Atomicity**:
+  - The whole transaction is processed or nothing is processed.
+  - A commonly cited example of an atomic transaction is money transactions between two bank accounts. The transaction of transferring money from one account to the other is made up of two operations. First, you have to withdraw money in one account, and second you have to save the withdrawn money to the second account. An atomic transaction, i.e., when either all operations occur or nothing occurs, keeps the database in a consistent state. This ensures that if either of those two operations (withdrawing money from the 1st account or saving the money to the 2nd account) fail, the money is neither lost nor created. Source Wikipedia for a detailed description of this example.
 
-#### Consistency:
-- Only transactions that abide by constraints and rules are written into the database, otherwise the database keeps the previous state. The data should be correct across all rows and tables.
+- **Consistency**:
+  - Only transactions that abide by constraints and rules are written into the database, otherwise the database keeps the previous state. The data should be correct across all rows and tables.
 
-#### Isolation:
+- **Isolation**:
 - Transactions are processed independently and securely, order does not matter.
 - A low level of isolation enables many users to access the data simultaneously, however this also increases the possibilities of concurrency effects (e.g., dirty reads or lost updates). On the other hand, a high level of isolation reduces these chances of concurrency effects, but also uses more system resources and transactions blocking each other.
 
-#### Durability:
+- **Durability**:
 - Completed transactions are saved to database even in cases of system failure.
 - A commonly cited example includes tracking flight seat bookings. So once the flight booking records a confirmed seat booking, the seat remains booked even if a system failure occurs. Source: Wikipedia.
+
+
+### OLAP vs. OLTP
+
+- **Online Analytical Processing (OLAP)**:
+  * Databases optimized for these workloads allow for complex analytical and ad hoc queries, including **aggregations**. These type of databases are optimized for reads.
+
+- **Online Transactional Processing (OLTP)**:
+  * Databases optimized for these workloads allow for less complex queries in large volume. The types of queries for these databases are read, insert, update, and delete.
+
+The key to remember the difference between OLAP and OLTP is **analytics (A)** vs **transactions (T)**. If you want to get the price of a shoe then you are using OLTP (this has very little or no aggregations). If you want to know the total stock of shoes a particular store sold, then this requires using OLAP (since this will require aggregations).
+- https://stackoverflow.com/questions/21900185/what-are-oltp-and-olap-what-is-the-difference-between-them
 
 ## NoSQL Databases
 
