@@ -26,8 +26,38 @@
 - **Online Transactional Processing (OLTP)**:
   * Databases optimized for these workloads allow for less complex queries in large volume. The types of queries for these databases are read, insert, update, and delete.
 
-The key to remember the difference between OLAP and OLTP is **analytics (A)** vs **transactions (T)**. If you want to get the price of a shoe then you are using OLTP (this has very little or no aggregations). If you want to know the total stock of shoes a particular store sold, then this requires using OLAP (since this will require aggregations).
-- https://stackoverflow.com/questions/21900185/what-are-oltp-and-olap-what-is-the-difference-between-them
+The key to remember the difference between OLAP and OLTP is **analytics (A)** vs **transactions (T)**. If you want to get the price of a shoe then you are using OLTP (this has very little or no aggregations). If you want to know the total stock of shoes a particular store sold, then this requires using OLAP (since this will require aggregations). Ref https://stackoverflow.com/questions/21900185/what-are-oltp-and-olap-what-is-the-difference-between-them
+
+### Structuring your data
+
+#### Normalization
+- To *reduce data redunancy* and *increase data integrity*
+- Objective of **normal form**:
+    * To free the db from unwanted insertions, updates, and deletion dependencies
+    * To reduce the need for refactoring the db as new types of data are introduced
+    * To make the relational model more informative to users
+    * To make the database neutral to the query statistics
+    
+**How to reach First Normal Form (1NF)**:
+- **Atomic values**: each cell contains unique and single values
+- Be able to add data without altering tables
+- Separate different relations into different tables
+- Keep relationships between tables together with **foreign keys**
+
+**Second Normal Form (2NF)**:
+- Have reached 1NF
+- All columns in the table must rely on the **Primary Key**
+
+**Third Normal Form (3NF)**:
+- Must be in 2nd Normal Form
+- No **transitive dependencies** 
+  * transitive dependencies you are trying to maintain is that to get from A-> C, you want to avoid going through B.
+- When to use 3NF: when you want to update data, we want to be able to do in just 1 place.
+
+
+
+#### Denormalization
+- Must be done in read heavy workloads to increase performance. 
 
 ## NoSQL Databases
 
