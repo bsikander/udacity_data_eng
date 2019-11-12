@@ -26,7 +26,7 @@
 - **Online Transactional Processing (OLTP)**:
   * Databases optimized for these workloads allow for less complex queries in large volume. The types of queries for these databases are read, insert, update, and delete.
 
-The key to remember the difference between OLAP and OLTP is **analytics (A)** vs **transactions (T)**. If you want to get the price of a shoe then you are using OLTP (this has very little or no aggregations). If you want to know the total stock of shoes a particular store sold, then this requires using OLAP (since this will require aggregations). 
+The key to remember the difference between OLAP and OLTP is **analytics (A)** vs **transactions (T)**. If you want to get the price of a shoe then you are using OLTP (this has very little or no aggregations). If you want to know the total stock of shoes a particular store sold, then this requires using OLAP (since this will require aggregations).
 
 Read [stackoverflow reference](https://stackoverflow.com/questions/21900185/what-are-oltp-and-olap-what-is-the-difference-between-them)
 
@@ -64,11 +64,11 @@ Read [stackoverflow reference](https://stackoverflow.com/questions/21900185/what
 
 #### Fact and Dimension Tables
 
-**Fact table** consists of the measurements, metrics, or facts of a business process. 
-**Dimensions** are **people**, **products**, **place**, and **time**. 
+**Fact table** consists of the measurements, metrics, or facts of a business process.
+**Dimensions** are **people**, **products**, **place**, and **time**.
 
 #### Star Schema
-- the simplest style of *data mart* schema. 
+- the simplest style of *data mart* schema.
 - consists of one or more fact tables referencing any number of dimension tables.
   * fact table is at the center
   * dimension table surrounds the fact table representing the star's points
@@ -76,7 +76,7 @@ Read [stackoverflow reference](https://stackoverflow.com/questions/21900185/what
   * denormalized
   * simplifies queries
   * fast aggregations
-- **drawbacks**: 
+- **drawbacks**:
   * issues that come with denormalization, e.g.
     - data integrity (duplicate data across multiple tables)
     - decreased query flexibility
