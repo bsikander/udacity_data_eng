@@ -18,6 +18,7 @@ pre-commit = "*"
 [packages]
 pyfunctional = "*"
 cassandra-driver = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.6"

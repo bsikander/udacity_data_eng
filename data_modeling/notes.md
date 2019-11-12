@@ -37,7 +37,7 @@ The key to remember the difference between OLAP and OLTP is **analytics (A)** vs
     * To reduce the need for refactoring the db as new types of data are introduced
     * To make the relational model more informative to users
     * To make the database neutral to the query statistics
-    
+
 **How to reach First Normal Form (1NF)**:
 - **Atomic values**: each cell contains unique and single values
 - Be able to add data without altering tables
@@ -50,13 +50,13 @@ The key to remember the difference between OLAP and OLTP is **analytics (A)** vs
 
 **Third Normal Form (3NF)**:
 - Must be in 2nd Normal Form
-- No **transitive dependencies** 
+- No **transitive dependencies**
   * transitive dependencies you are trying to maintain is that to get from A-> C, you want to avoid going through B.
 - When to use 3NF: when you want to update data, we want to be able to do in just 1 place.
 
 
 ### Denormalization
-- Must be done in read heavy workloads to increase performance. 
+- Must be done in read heavy workloads to increase performance.
   * reads will be faster (select)
   * writes will be slower (insert, update, delete)
 
