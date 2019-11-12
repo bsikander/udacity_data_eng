@@ -92,6 +92,11 @@ Read [stackoverflow reference](https://stackoverflow.com/questions/21900185/what
 
 Ref [Deep Diving in the World of Data Warehousing](https://medium.com/@BluePi_In/deep-diving-in-the-world-of-data-warehousing-78c0d52f49a)
 
+More refs:
+- upsert: http://www.postgresqltutorial.com/postgresql-upsert/
+- insert: https://www.postgresql.org/docs/9.5/sql-insert.html
+
+
 # NoSQL Databases
 
 Common types of NoSQL databases:
