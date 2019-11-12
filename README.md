@@ -1,7 +1,7 @@
 this repo contains my study notes for udacity's [data engineering nanodegree program](https://www.udacity.com/course/data-engineer-nanodegree--nd027)
 
 ## data modeling
-* [ ] project: data modeling w/ postgres
+* [ ] project: data modeling w/ postgres. due **nov 25, 2019**. 
 * [ ] project: data modeling w/ apache cassandra
 
 #### quick links
@@ -13,20 +13,20 @@ this repo contains my study notes for udacity's [data engineering nanodegree pro
 
 
 ## cloud data warehouses
-* [ ] project: data warehouses
+* [ ] project: data warehouses. due **jan 3, 2020**. 
 estimated time: 28 days
 actual time:
 
 ## data lakes with spark
-* [ ] project: data lake
+* [ ] project: data lake. due **jan 30, 2020**
 * [ ] project: optimize your github profile
 
 ## data pipeline with airflow
-* [ ] project: data pipelines
+* [ ] project: data pipelines. due **feb 27, 2020**
 * [ ] project: improve your linkedin profile
 
 ## capstone project
-* [ ] project: data engineering capstone project
+* [ ] project: data engineering capstone project. due **mar 27, 2020**
 
 
 ## extracurricular
