@@ -1,12 +1,12 @@
 ---
-version: "3"
+version: '3'
 services:
   postgres:
     image: "postgres:11"
     environment:
-      - POSTGRES_USER='student'
-      - POSTGRES_PASSWORD='student'
-      - POSTGRES_DB='studentdb'
+      - POSTGRES_USER=student
+      - POSTGRES_PASSWORD=student
+      - POSTGRES_DB=studentdb
     ports:
       - "5432:5432"
     volumes:
