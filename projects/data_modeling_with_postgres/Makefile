@@ -2,7 +2,7 @@ clean:
 	docker system prune --volumes
 
 up:
-	docker-compose up 
+	docker-compose up
 
 down:
 	docker-compose down --remove-orphans --volumes
