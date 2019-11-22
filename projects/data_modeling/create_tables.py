@@ -8,8 +8,8 @@ def get_conn_params(database: str = "studentdb", user: str = "student", password
     """Build params dict for a database connection."""
     return {
         "type": "postgres",
-        "host": "localhost",
-        "port": 3100,
+        "host": "data_modeling_postgres_1",
+        "port": 5432,
         "user": user,
         "password": password,
         "database": database,

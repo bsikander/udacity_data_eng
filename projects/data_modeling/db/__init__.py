@@ -18,7 +18,7 @@ def get_engine_factory(scheme: str) -> T.Callable:
     if scheme not in SUPPORTED_FACTORY_SCHEMES:
         raise ValueError(f"Unsupported database scheme: {scheme}")
 
-    mod = import_module(f"data_engineering.db.{scheme}")
+    mod = import_module(f"db.{scheme}")
     factory_method = getattr(mod, f"{scheme}_engine_factory")
     return factory_method
 
