@@ -25,12 +25,7 @@ def get_engine_factory(scheme: str) -> T.Callable:
 
 
 def get_engine(scheme: str, connection: dict) -> sa.engine.base.Engine:
-    """Get a SQLAlchemy engine connected to a specific database.
-
-    :param scheme: Type of database to get SQLAlchemy engine for
-    :param connection: dict of parameters to pass to SQLAlchemy engine
-        constructor to establish database connection
-    """
+    """Get a SQLAlchemy engine connected to a specific database."""
     factory = get_engine_factory(scheme)
     return factory(**connection)
 
@@ -44,6 +39,7 @@ def query_executor(engine: sa.engine.base.Engine, query: str, **kwargs):
             conn = conn.execution_options(**kwargs)
 
     try:
+        # use logger instead
         print(query)
         logger.info(query)
         lazy_result = conn.execute(query)
