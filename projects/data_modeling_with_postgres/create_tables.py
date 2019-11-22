@@ -4,14 +4,15 @@ from db import get_engine, query_executor
 import sqlalchemy as sa
 
 
-def get_conn_params() -> str:
+def get_conn_params(database: str = "studentdb", user: str = "student", password: str = "student"):
     """Build params dict for a database connection."""
     return {
         "type": "postgres",
         "host": "localhost",
         "port": 3100,
-        "user": "student",
-        "password": "student",
+        "user": user,
+        "password": password,
+        "database": database,
     }
 
 
@@ -40,11 +41,12 @@ def create_tables(engine: sa.engine.base.Engine):
 
 def main():
     conn_params = get_conn_params()
-    engine = get_engine(conn_params["type"], **conn_params)
+    engine = get_engine(conn_params["type"], conn_params)
 
     db_name = "sparkifydb"
     create_database(engine=engine, db_name=db_name)
-    engine = get_engine(conn_params["type"], database=db_name, **conn_params)
+    conn_params = get_conn_params(database=db_name)
+    engine = get_engine(conn_params["type"], conn_params)
 
     drop_tables(engine)
     create_tables(engine)
