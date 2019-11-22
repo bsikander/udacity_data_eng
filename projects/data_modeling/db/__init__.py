@@ -1,11 +1,12 @@
 """Utilities for establishing SQLAlchemy connections to different databases."""
 import typing as T
+import logging
 import warnings
 from importlib import import_module
 
 import sqlalchemy as sa
 
-from sqlalchemy import text
+logger = logging.getLogger(__name__)
 
 SUPPORTED_FACTORY_SCHEMES = {"postgres"}
 
@@ -34,25 +35,24 @@ def get_engine(scheme: str, connection: dict) -> sa.engine.base.Engine:
     return factory(**connection)
 
 
-def query_executor(engine: sa.engine.base.Engine, query: str, **execution_options):
+def query_executor(engine: sa.engine.base.Engine, query: str, **kwargs):
     """Execute DB queries safely."""
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=UserWarning, module="cffi")
-
-        connection = engine.connect()
-
-    query = text(query)
-    if len(execution_options) > 0:
-        query = query.execution_options(**execution_options)
+        conn = engine.connect()
+        if len(kwargs) > 0:
+            conn = conn.execution_options(**kwargs)
 
     try:
-        lazy_result = connection.execute(query)
+        print(query)
+        logger.info(query)
+        lazy_result = conn.execute(query)
         try:
             results = lazy_result.fetchall()
         except sa.exc.ResourceClosedError:
             # some statements don't return rows
             results = None
     finally:
-        connection.close()
+        conn.close()
         engine.dispose()
     return results

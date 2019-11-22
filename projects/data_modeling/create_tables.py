@@ -1,10 +1,17 @@
 from sql_queries import create_table_queries, drop_table_queries
 
+import logging
+import logging.config
+
 from db import get_engine, query_executor
 import sqlalchemy as sa
 
+logging.config.fileConfig("logging.ini")
 
-def get_conn_params(database: str = "studentdb", user: str = "student", password: str = "student"):
+
+def get_conn_params(
+    database: str = "studentdb", user: str = "student", password: str = "student"
+):
     """Build params dict for a database connection."""
     return {
         "type": "postgres",
@@ -20,11 +27,10 @@ def create_database(engine: sa.engine.base.Engine, db_name: str = None):
     if db_name is None:
         raise ValueError("database name is not provided.")
 
-    # create sparkify database with UTF8 encoding
-    query_executor(engine, "DROP DATABASE IF EXISTS sparkifydb")
-    query_executor(
-        engine, "CREATE DATABASE sparkifydb WITH ENCODING 'utf8' TEMPLATE template0"
-    )
+    drop_db_query = f"DROP DATABASE IF EXISTS {db_name}"
+    query_executor(engine, drop_db_query, isolation_level="AUTOCOMMIT")
+    create_db_query = f"CREATE DATABASE {db_name} WITH ENCODING 'utf8'"
+    query_executor(engine, create_db_query, isolation_level="AUTOCOMMIT")
 
     return db_name
 
