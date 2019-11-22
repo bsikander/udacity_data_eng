@@ -1,50 +1,53 @@
-import psycopg2
 from sql_queries import create_table_queries, drop_table_queries
 
+from db import get_engine, query_executor
+import sqlalchemy as sa
 
-def create_database():
-    # connect to default database
-    conn = psycopg2.connect(
-        "host=localhost port=5432 dbname=studentdb user=student password=student"
-    )
-    conn.set_session(autocommit=True)
-    cur = conn.cursor()
+
+def get_conn_params() -> str:
+    """Build params dict for a database connection."""
+    return {
+        "type": "postgres",
+        "host": "localhost",
+        "port": 3100,
+        "user": "student",
+        "password": "student",
+    }
+
+
+def create_database(engine: sa.engine.base.Engine, db_name: str = None):
+    if db_name is None:
+        raise ValueError("database name is not provided.")
 
     # create sparkify database with UTF8 encoding
-    cur.execute("DROP DATABASE IF EXISTS sparkifydb")
-    cur.execute("CREATE DATABASE sparkifydb WITH ENCODING 'utf8' TEMPLATE template0")
-
-    # close connection to default database
-    conn.close()
-
-    # connect to sparkify database
-    conn = psycopg2.connect(
-        "host=localhost port=5432 dbname=sparkifydb user=student password=student"
+    query_executor(engine, "DROP DATABASE IF EXISTS sparkifydb")
+    query_executor(
+        engine, "CREATE DATABASE sparkifydb WITH ENCODING 'utf8' TEMPLATE template0"
     )
-    cur = conn.cursor()
 
-    return cur, conn
+    return db_name
 
 
-def drop_tables(cur, conn):
+def drop_tables(engine: sa.engine.base.Engine):
     for query in drop_table_queries:
-        cur.execute(query)
-        conn.commit()
+        query_executor(engine, query)
 
 
-def create_tables(cur, conn):
+def create_tables(engine: sa.engine.base.Engine):
     for query in create_table_queries:
-        cur.execute(query)
-        conn.commit()
+        query_executor(engine, query)
 
 
 def main():
-    cur, conn = create_database()
+    conn_params = get_conn_params()
+    engine = get_engine(conn_params["type"], **conn_params)
 
-    drop_tables(cur, conn)
-    create_tables(cur, conn)
+    db_name = "sparkifydb"
+    create_database(engine=engine, db_name=db_name)
+    engine = get_engine(conn_params["type"], database=db_name, **conn_params)
 
-    conn.close()
+    drop_tables(engine)
+    create_tables(engine)
 
 
 if __name__ == "__main__":
