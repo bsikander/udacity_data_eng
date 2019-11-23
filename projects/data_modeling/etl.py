@@ -1,35 +1,23 @@
 import os
 import glob
-import psycopg2
 import pandas as pd
 import logging
+import typing as T
+import json
+
+from io import StringIO
 
 import sqlalchemy as sa
 
+from tempfile import NamedTemporaryFile
+
 from config import instrument
 from db import get_engine, query_executor
-from db.postgres import get_conn_params
+from db.postgres import get_conn_params, copy_to_postgres
 
-from sql_queries import *
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-
-
-def process_song_file(engine, filepath):
-    # open song file
-    df = pd.read_json(filepath)
-    import ipdb
-
-    ipdb.set_trace()
-
-    # insert song record
-    # song_data =
-    # cur.execute(song_table_insert, song_data)
-    #
-    # # insert artist record
-    # artist_data =
-    # cur.execute(artist_table_insert, artist_data)
 
 
 # def process_log_file(engine, filepath):
@@ -69,20 +57,69 @@ def process_song_file(engine, filepath):
 #         cur.execute(songplay_table_insert, songplay_data)
 
 
-def process_data(engine, filepath, func):
-    # get all files matching extension from directory
+def get_files(path):
+    """return all files matching extension from a dir."""
     all_files = []
-    for root, dirs, files in os.walk(filepath):
+    for root, dirs, files in os.walk(path):
         files = glob.glob(os.path.join(root, "*.json"))
         for f in files:
             all_files.append(os.path.abspath(f))
 
-    num_files = len(all_files)
-    logger.info(f"{num_files} files found in {filepath}")
+    logger.info(f"{len(files)} files found in {path}")
+    return all_files
 
-    for idx, datafile in enumerate(all_files, 1):
-        func(engine, datafile)
-        logger.info(f"{idx}/{num_files} files processed.")
+
+def process_song_file(engine, filepath):
+    pass
+
+    # open song file
+    # insert song record
+    # song_data =
+    # cur.execute(song_table_insert, song_data)
+    #
+    # # insert artist record
+    # artist_data =
+    # cur.execute(artist_table_insert, artist_data)
+
+
+def copy_into_table(
+    table: str,
+    engine: sa.engine.base.Engine,
+    df: pd.DataFrame,
+    cols: T.List[str] = None,
+) -> bool:
+    """Uses COPY command to load data to an existing Postgres table."""
+    logger.info(f"Copying into table {table}")
+    buf = df.to_csv(sep=",", columns=cols, header=False, index=False)
+    logger.info(buf)
+    copy_to_postgres(engine, buf, table, validate=True)
+
+
+def process_data(engine, filepath, load_fn):
+    all_files = get_files(filepath)
+
+    def json_to_df(filename: str):
+        data = json.load(open(filename))
+        df = pd.DataFrame.from_records([data])
+        return df
+
+    df = pd.DataFrame()
+    logger.info("Reading data from json to df...")
+    for idx, f in enumerate(all_files, 1):
+        dfa = json_to_df(f)
+        df = df.append(dfa)
+
+    artists_cols = [
+        "artist_id",
+        "artist_name",
+        "artist_location",
+        "artist_latitude",
+        "artist_longitude",
+    ]
+    songs_cols = ["song_id", "title", "artist_id", "year", "duration"]
+
+    copy_into_table("songs", engine=engine, df=df, cols=songs_cols)
+    copy_into_table("artists", engine=engine, df=df, cols=artists_cols)
 
 
 def main():
@@ -90,7 +127,7 @@ def main():
     conn_params = get_conn_params(database=db_name)
     engine = get_engine(conn_params["type"], conn_params)
 
-    process_data(engine, filepath="data/song_data", func=process_song_file)
+    process_data(engine, filepath="data/song_data", load_fn=process_song_file)
     # process_data(engine, filepath='data/log_data', func=process_log_file)
 
 

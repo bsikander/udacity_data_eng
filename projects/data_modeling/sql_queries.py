@@ -9,8 +9,8 @@ CREATE TABLE songplay (
     songplay_id int,
     start_time timestamp,
     user_id int,
-    song_id int,
-    artist_id int,
+    song_id text,
+    artist_id text,
     session_id int,
     level text,
     location text,
@@ -30,9 +30,9 @@ CREATE TABLE users (
 
 song_table_create = """
 CREATE TABLE songs (
-    song_id int,
+    song_id text,
     title text,
-    artist_id int,
+    artist_id text,
     year int,
     duration float
 );
@@ -40,7 +40,7 @@ CREATE TABLE songs (
 
 artist_table_create = """
 CREATE TABLE artists (
-    artist_id int,
+    artist_id text,
     name text,
     location text,
     latitude float,
