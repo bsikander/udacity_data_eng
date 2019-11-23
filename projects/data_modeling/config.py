@@ -41,12 +41,6 @@ def logging_setup():
         "loggers": {},
     }
 
-    log_dict["formatters"]["plain"] = {
-        "()": structlog.stdlib.ProcessorFormatter,
-        "processor": structlog.processors.JSONRenderer(),
-        "foreign_pre_chain": pre_chain,
-    }
-
     log_dict["formatters"]["colored"] = {
         "()": structlog.stdlib.ProcessorFormatter,
         "processor": structlog.dev.ConsoleRenderer(colors=True),

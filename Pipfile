@@ -6,13 +6,6 @@ verify_ssl = true
 [dev-packages]
 black = "*"
 flake8 = "*"
-flake8-isort = "*"
-flake8-docstrings = "*"
-flake8-broken-line = "*"
-flake8-eradicate = "*"
-flake8-comprehensions = "*"
-flake8-bugbear = "*"
-flake8-pep3101 = "*"
 pre-commit = "*"
 
 [packages]

@@ -39,8 +39,6 @@ def query_executor(engine: sa.engine.base.Engine, query: str, **kwargs):
             conn = conn.execution_options(**kwargs)
 
     try:
-        # use logger instead
-        print(query)
         logger.info(query)
         lazy_result = conn.execute(query)
         try:
