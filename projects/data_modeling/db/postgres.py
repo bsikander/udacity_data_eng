@@ -39,14 +39,18 @@ def postgres_engine_factory(
 
 
 def copy_to_postgres(
-    engine: sa.engine.base.Engine, data: str, table: str, validate: bool = False
+    engine: sa.engine.base.Engine,
+    data: str,
+    table: str,
+    validate: bool = False,
+    **kwargs,
 ):
     """Execute COPY FROM query in Postgres safely."""
     conn = engine.raw_connection()
     cur = conn.cursor()
 
     try:
-        results = cur.copy_from(StringIO(data), table, sep=",")
+        results = cur.copy_from(StringIO(data), table, **kwargs)
         if validate:
             cur.execute(f"SELECT count(*) from {table}")
             select_results = cur.fetchall()

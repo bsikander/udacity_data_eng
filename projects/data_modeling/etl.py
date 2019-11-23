@@ -5,14 +5,11 @@ import logging
 import typing as T
 import json
 
-from io import StringIO
 
 import sqlalchemy as sa
 
-from tempfile import NamedTemporaryFile
-
 from config import instrument
-from db import get_engine, query_executor
+from db import get_engine
 from db.postgres import get_conn_params, copy_to_postgres
 
 
@@ -69,33 +66,24 @@ def get_files(path):
     return all_files
 
 
-def process_song_file(engine, filepath):
-    pass
-
-    # open song file
-    # insert song record
-    # song_data =
-    # cur.execute(song_table_insert, song_data)
-    #
-    # # insert artist record
-    # artist_data =
-    # cur.execute(artist_table_insert, artist_data)
-
-
 def copy_into_table(
     table: str,
     engine: sa.engine.base.Engine,
     df: pd.DataFrame,
     cols: T.List[str] = None,
+    delimiter: str = ",",
+    null_string: str = "",
 ) -> bool:
     """Uses COPY command to load data to an existing Postgres table."""
-    logger.info(f"Copying into table {table}")
-    buf = df.to_csv(sep=",", columns=cols, header=False, index=False)
+    logger.info(f"Copying into table {table}...")
+    buf = df.to_csv(
+        sep=delimiter, na_rep=null_string, columns=cols, header=False, index=False
+    )
     logger.info(buf)
-    copy_to_postgres(engine, buf, table, validate=True)
+    copy_to_postgres(engine, buf, table, validate=True, sep=delimiter, null=null_string)
 
 
-def process_data(engine, filepath, load_fn):
+def process_data(engine, filepath):
     all_files = get_files(filepath)
 
     def json_to_df(filename: str):
@@ -127,7 +115,7 @@ def main():
     conn_params = get_conn_params(database=db_name)
     engine = get_engine(conn_params["type"], conn_params)
 
-    process_data(engine, filepath="data/song_data", load_fn=process_song_file)
+    process_data(engine, filepath="data/song_data")
     # process_data(engine, filepath='data/log_data', func=process_log_file)
 
 
