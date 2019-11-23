@@ -10,7 +10,7 @@ repos:
       - id: pretty-format-json
         args: [--autofix, --indent, '2']
         exclude: '\.lock$'
-      - id: flake8
+      # - id: flake8
   - repo: https://github.com/ambv/black
     rev: 19.3b0
     hooks:
