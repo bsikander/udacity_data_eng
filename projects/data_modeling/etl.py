@@ -17,43 +17,6 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-# def process_log_file(engine, filepath):
-#     # open log file
-#     df =
-#
-#     # filter by NextSong action
-#     df =
-#
-#     # convert timestamp column to datetime
-#     t =
-#
-#     # insert time data records
-#     time_data =
-#     column_labels =
-#     time_df =
-#
-#     for i, row in time_df.iterrows():
-#         cur.execute(time_table_insert, list(row))
-#
-#     # load user table
-#     user_df =
-#
-#     # insert user records
-#     for i, row in user_df.iterrows():
-#         cur.execute(user_table_insert, row)
-#
-#     # insert songplay records
-#     for index, row in df.iterrows():
-#
-#         # get songid and artistid from song and artist tables
-#         results = cur.execute(song_select, (row.song, row.artist, row.length))
-#         songid, artistid = results if results else None, None
-#
-#         # insert songplay record
-#         songplay_data =
-#         cur.execute(songplay_table_insert, songplay_data)
-
-
 def process_song_file(filename: str):
     """Loads a song file and returns a dataframe."""
     data = json.load(open(filename))
@@ -67,7 +30,17 @@ def process_log_file(filename: str):
     # artist, auth, firstName, gender, itemInSession, lastName, length,
     # level, location, method, page, registration, sessionId, song, status,
     # ts, userAgent, userId
-    pass
+
+    # filter by NextSong action
+
+    # convert timestamp column to datetime
+
+    # insert time data
+
+    # insert user records
+
+    # insert songplay records
+    return df
 
 
 def get_files(path, ext: str = "json"):
