@@ -1,13 +1,9 @@
-# DROP TABLES
+def get_drop_table_query(table: str):
+    """returns drop table query."""
+    return f"DROP TABLE IF EXISTS {table}"
 
-songplay_table_drop = "DROP TABLE IF EXISTS songplays"
-user_table_drop = "DROP TABLE IF EXISTS users"
-song_table_drop = "DROP TABLE IF EXISTS songs"
-artist_table_drop = "DROP TABLE IF EXISTS artists"
-time_table_drop = "DROP TABLE IF EXISTS time"
 
-# CREATE TABLES
-
+# create tables
 songplay_table_create = """
 CREATE TABLE songplay (
     songplay_id int,
@@ -64,6 +60,22 @@ CREATE TABLE time (
 );
 """
 
+create_table_queries = [
+    songplay_table_create,
+    user_table_create,
+    song_table_create,
+    artist_table_create,
+    time_table_create,
+]
+
+drop_table_queries = [
+    get_drop_table_query("songplays"),
+    get_drop_table_query("users"),
+    get_drop_table_query("songs"),
+    get_drop_table_query("artists"),
+    get_drop_table_query("time"),
+]
+
 # INSERT RECORDS
 
 songplay_table_insert = """
@@ -86,20 +98,3 @@ time_table_insert = """
 
 song_select = """
 """
-
-# QUERY LISTS
-
-create_table_queries = [
-    songplay_table_create,
-    user_table_create,
-    song_table_create,
-    artist_table_create,
-    time_table_create,
-]
-drop_table_queries = [
-    songplay_table_drop,
-    user_table_drop,
-    song_table_drop,
-    artist_table_drop,
-    time_table_drop,
-]

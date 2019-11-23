@@ -14,6 +14,3 @@ regen-reqs:
 	rm -f requirements*.txt
 	pipenv lock -r --dev > requirements-dev.txt
 	pipenv lock -r > requirements.txt
-
-convert:
-	jupyter nbconvert --to python

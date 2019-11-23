@@ -8,6 +8,7 @@ pyfunctional = "*"
 psycopg2 = "*"
 sqlalchemy = "*"
 colorama = "*"
+pandas = "*"
 
 [dev-packages]
 black = "*"

@@ -1,28 +1,16 @@
-from sql_queries import create_table_queries, drop_table_queries
-
 import os
 import logging
-from config import instrument
 
-from db import get_engine, query_executor
 import sqlalchemy as sa
+
+from config import instrument
+from db import get_engine, query_executor
+from db.postgres import get_conn_params
+
+from sql_queries import create_table_queries, drop_table_queries
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-
-
-def get_conn_params(
-    database: str = "studentdb", user: str = "student", password: str = "student",
-):
-    """Build params dict for a database connection."""
-    return {
-        "type": "postgres",
-        "host": "127.0.0.1",
-        "port": 5432,
-        "user": user,
-        "password": password,
-        "database": database,
-    }
 
 
 def create_database(engine: sa.engine.base.Engine, db_name: str = None):

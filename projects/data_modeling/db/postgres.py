@@ -2,6 +2,20 @@
 import sqlalchemy as sa
 
 
+def get_conn_params(
+    database: str = "studentdb", user: str = "student", password: str = "student",
+):
+    """Build params dict for a database connection."""
+    return {
+        "type": "postgres",
+        "host": "127.0.0.1",
+        "port": 5432,
+        "user": user,
+        "password": password,
+        "database": database,
+    }
+
+
 def postgres_engine_factory(
     user: str,
     password: str,
