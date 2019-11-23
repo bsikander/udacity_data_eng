@@ -54,11 +54,27 @@ logger.setLevel(logging.DEBUG)
 #         cur.execute(songplay_table_insert, songplay_data)
 
 
-def get_files(path):
-    """return all files matching extension from a dir."""
+def process_song_file(filename: str):
+    """Loads a song file and returns a dataframe."""
+    data = json.load(open(filename))
+    df = pd.DataFrame.from_records([data])
+    return df
+
+
+def process_log_file(filename: str):
+    """Loads a log file, sanitizes it, and returns a dataframe."""
+    df = pd.read_json(filename, orient="records")
+    # artist, auth, firstName, gender, itemInSession, lastName, length,
+    # level, location, method, page, registration, sessionId, song, status,
+    # ts, userAgent, userId
+    pass
+
+
+def get_files(path, ext: str = "json"):
+    """return all files matching extension from a directory."""
     all_files = []
     for root, dirs, files in os.walk(path):
-        files = glob.glob(os.path.join(root, "*.json"))
+        files = glob.glob(os.path.join(root, f"*.{ext}"))
         for f in files:
             all_files.append(os.path.abspath(f))
 
@@ -83,18 +99,13 @@ def copy_into_table(
     copy_to_postgres(engine, buf, table, validate=True, sep=delimiter, null=null_string)
 
 
-def process_data(engine, filepath):
+def process_data(engine, filepath, load_fn):
     all_files = get_files(filepath)
-
-    def json_to_df(filename: str):
-        data = json.load(open(filename))
-        df = pd.DataFrame.from_records([data])
-        return df
 
     df = pd.DataFrame()
     logger.info("Reading data from json to df...")
     for idx, f in enumerate(all_files, 1):
-        dfa = json_to_df(f)
+        dfa = load_fn(f)
         df = df.append(dfa)
 
     artists_cols = [
@@ -115,8 +126,8 @@ def main():
     conn_params = get_conn_params(database=db_name)
     engine = get_engine(conn_params["type"], conn_params)
 
-    process_data(engine, filepath="data/song_data")
-    # process_data(engine, filepath='data/log_data', func=process_log_file)
+    process_data(engine, filepath="data/song_data", load_fn=process_song_file)
+    process_data(engine, filepath="data/log_data", func=process_log_file)
 
 
 if not os.getenv("SKIP_INSTRUMENT"):
