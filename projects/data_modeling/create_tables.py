@@ -1,16 +1,18 @@
 from sql_queries import create_table_queries, drop_table_queries
 
+import os
 import logging
-import logging.config
+from config import instrument
 
 from db import get_engine, query_executor
 import sqlalchemy as sa
 
-logging.config.fileConfig("logging.ini")
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 def get_conn_params(
-    database: str = "studentdb", user: str = "student", password: str = "student"
+    database: str = "studentdb", user: str = "student", password: str = "student",
 ):
     """Build params dict for a database connection."""
     return {
@@ -57,6 +59,9 @@ def main():
     drop_tables(engine)
     create_tables(engine)
 
+
+if not os.getenv("SKIP_INSTRUMENT"):
+    instrument()
 
 if __name__ == "__main__":
     main()
