@@ -26,10 +26,25 @@ def process_song_file(filename: str):
 
 def process_log_file(filename: str):
     """Loads a log file, sanitizes it, and returns a dataframe."""
+
+    def clean_cols(df):
+        df.columns = (
+            df.columns.str.strip()
+            .str.lower()
+            .str.replace(" ", "_")
+            .str.replace("(", "")
+            .str.replace(")", "")
+        )
+        return df
+
     df = pd.read_json(filename, orient="records")
     # artist, auth, firstName, gender, itemInSession, lastName, length,
     # level, location, method, page, registration, sessionId, song, status,
     # ts, userAgent, userId
+
+    df = clean_cols(df)
+
+    # df.rename(columns={"A": "a", "B": "c"})
 
     # filter by NextSong action
 
@@ -89,9 +104,11 @@ def process_data(engine, filepath, load_fn):
         "artist_longitude",
     ]
     songs_cols = ["song_id", "title", "artist_id", "year", "duration"]
+    users_cols = ["user_id", "first_name", "last_name", "gender", "level"]
 
     copy_into_table("songs", engine=engine, df=df, cols=songs_cols)
     copy_into_table("artists", engine=engine, df=df, cols=artists_cols)
+    copy_into_table("users", engine=engine, df=df, cols=users_cols)
 
 
 def main():
