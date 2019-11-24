@@ -7,10 +7,7 @@ import json
 
 import sqlalchemy as sa
 
-from config import instrument
-from db import get_engine
-from db.postgres import get_conn_params, copy_to_postgres
-
+from db.postgres import copy_to_postgres
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -153,19 +150,3 @@ def process_song_data(engine, filepath):
     songs_cols = ["song_id", "title", "artist_id", "year", "duration"]
     dfs = df[songs_cols]
     copy_into_table("songs", engine, dfs, cols=songs_cols)
-
-
-def main():
-    db_name = "sparkifydb"
-    conn_params = get_conn_params(database=db_name)
-    engine = get_engine(conn_params["type"], conn_params)
-
-    process_song_data(engine, filepath="data/song_data")
-    process_log_data(engine, filepath="data/log_data")
-
-
-if not os.getenv("SKIP_INSTRUMENT"):
-    instrument()
-
-if __name__ == "__main__":
-    main()
