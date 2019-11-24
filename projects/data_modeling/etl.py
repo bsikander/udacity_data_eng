@@ -23,7 +23,7 @@ def get_files(path, ext: str = "json"):
         files = glob.glob(os.path.join(root, f"*.{ext}"))
         for f in files:
             all_files.append(os.path.abspath(f))
-    logger.info(f"{len(files)} files found in {path}")
+    logger.info(f"{len(all_files)} files found in {path}")
     return all_files
 
 
@@ -33,7 +33,6 @@ def clean_cols(df, drop_cols: T.List[str] = None):
     df.columns = df.columns.str.strip().str.replace("(", "").str.replace(")", "")
     df.columns = map(stringcase.snakecase, df.columns)
 
-    # drop cols
     if drop_cols is not None:
         df = df.drop(columns=drop_cols)
 
@@ -87,37 +86,24 @@ def process_log_data(engine, filepath):
     dfu = df[user_cols].drop_duplicates(subset="user_id")
     copy_into_table("users", engine, dfu, cols=user_cols)
 
-    # copy into time table
-    # filter records by NextSong action
-    df = df.loc[df["page"] == "NextSong"]
     # convert timestamp column to datetime
     df["ts"] = pd.to_datetime(df["ts"], unit="ms", infer_datetime_format=True)
+
+    # copy into time table
+    df = df.loc[df["page"] == "NextSong"]
     # extract timeinfo from ts and split to new cols
+    df_time = df
     time_cols = ["hour", "day", "week", "month", "year", "weekday"]
     for col in time_cols:
-        # TODO: fix the warnings
         ts = df["ts"]
-        df[col] = getattr(ts.dt, col)
+        df_time[col] = getattr(ts.dt, col)
 
     time_cols.append("start_time")
-    dfns = df.rename(columns={"ts": "start_time"})[time_cols]
-    copy_into_table("time", engine, dfns, cols=time_cols)
+    df_time = df.rename(columns={"ts": "start_time"})[time_cols]
+    copy_into_table("time", engine, df_time, cols=time_cols)
 
     # copy in to songplays table
-    dfsp = df.rename(columns={"ts": "start_time"})
-
-    # this didn't find shit
-    # conn = engine.raw_connection()
-    # cur = conn.cursor()
-    # for _idx, row in dfsp.iterrows():
-    #     # get songid and artistid from song and artist tables
-    #     cur.execute(song_select, (row.song, row.artist, row.length))
-    #     results = cur.fetchone()
-    #     if results:
-    #         import ipdb; ipdb.set_trace()
-    #         song_id, artist_id = results
-    #     else:
-    #         song_id, artist_id = None, None
+    df_song_play = df.rename(columns={"ts": "start_time"})
 
     songplays_cols = [
         "artist_id",
@@ -130,28 +116,18 @@ def process_log_data(engine, filepath):
         "user_agent",
     ]
 
-    artist_names = df.artist.dropna().unique()
-    song_titles = df.song.dropna().unique()
-
     query = "SELECT artist_id, name FROM artists;"
     results = query_executor(engine, query)
     artist_dict = dict((y, x) for x, y in results)
-    dfsp["artist_id"] = dfsp["artist"].map(artist_dict)
-
-    logger.info(dfsp[dfsp["artist_id"].notna()])
+    df_song_play["artist_id"] = df_song_play["artist"].map(artist_dict)
 
     query = "SELECT song_id, title FROM songs;"
     results = query_executor(engine, query)
     song_dict = dict((y, x) for x, y in results)
-    dfsp["song_id"] = dfsp["song"].map(song_dict)
+    df_song_play["song_id"] = df_song_play["song"].map(song_dict)
+    df_song_play = df_song_play[songplays_cols]
 
-    # TODO: audit why there's no song found
-    common = set(song_titles) & set(song_dict.keys())
-    logger.info(common)
-
-    dfsp = dfsp[songplays_cols]
-
-    copy_into_table("songplays", engine, dfsp, cols=songplays_cols)
+    copy_into_table("songplays", engine, df_song_play, cols=songplays_cols)
 
 
 def process_song_data(engine, filepath):

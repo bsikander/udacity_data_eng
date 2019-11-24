@@ -32,7 +32,7 @@ def test(engine):
     def select_query(table: str, limit: int = default_limit):
         return f"SELECT * from {table} LIMIT {limit}"
 
-    tables = ["songs", "artists", "users", "time"]
+    tables = ["songs", "artists", "users", "time", "songplays"]
 
     for q in map(select_query, tables):
         results = query_executor(engine, q)
@@ -40,6 +40,15 @@ def test(engine):
 
         for res in results:
             logger.info(res)
+
+    logger.info("Running test on fct table songplays...")
+    test_query = (
+        "SELECT * FROM songplays WHERE song_id is not null AND artist_id is not null"
+    )
+    results = query_executor(engine, test_query)
+    assert len(results) == 1
+    for res in results:
+        logger.info(res)
 
 
 def main(run_test: bool = False, refresh_database: bool = False):
