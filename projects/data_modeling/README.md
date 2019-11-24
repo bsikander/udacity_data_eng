@@ -14,7 +14,7 @@
 or
 ```
 ➜  data_modeling git:(master) pip install -r requirements.txt
-➜  data_modeling git:(master) pip install -r requirements-text.txt
+➜  data_modeling git:(master) pip install -r requirements-dev.txt
 ```
 
 #### spin up postgres inside docker
