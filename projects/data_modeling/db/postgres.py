@@ -9,10 +9,11 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def get_conn_params(
-    database: str = "studentdb", user: str = "student", password: str = "student",
-) -> dict:
+def get_conn_params(database: str, user: str = "", password: str = "",) -> dict:
     """Build params dict for a database connection."""
+    if database is None:
+        raise ValueError("database is not provided.")
+
     return {
         "type": "postgres",
         "host": "127.0.0.1",
@@ -68,6 +69,7 @@ def copy_to_postgres(
             cur.execute(query)
             select_results = cur.fetchall()
             logger.info(f"{select_results[0][0]} rows uploaded to {table}")
+        conn.commit()
     finally:
         conn.close()
         engine.dispose()

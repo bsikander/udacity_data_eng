@@ -5,7 +5,7 @@ def get_drop_table_query(table: str):
 
 # create tables
 songplay_table_create = """
-CREATE TABLE songplay (
+CREATE TABLE songplays (
     songplay_id int,
     start_time timestamp,
     user_id int,

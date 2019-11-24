@@ -116,7 +116,7 @@ def process_song_data(engine, filepath):
     def file_to_df(filename: str):
         """Loads a song file and returns a dataframe."""
         data = json.load(open(filename))
-        df = pd.DataFrame.from_records([data], sort=False)
+        df = pd.DataFrame.from_records([data])
         # TODO: drop some cols
         df = clean_cols(df)
         return df
@@ -129,6 +129,12 @@ def process_song_data(engine, filepath):
         dfa = file_to_df(f)
         df = df.append(dfa)
 
+    # songs table
+    songs_cols = ["song_id", "title", "artist_id", "year", "duration"]
+    dfs = df[songs_cols]
+    copy_into_table("songs", engine, dfs, cols=songs_cols)
+
+    # artists table
     artists_cols = [
         "artist_id",
         "name",
@@ -146,7 +152,3 @@ def process_song_data(engine, filepath):
     )[artists_cols]
     dfa.drop_duplicates(subset="artist_id", keep=False, inplace=True)
     copy_into_table("artists", engine, dfa, cols=artists_cols)
-
-    songs_cols = ["song_id", "title", "artist_id", "year", "duration"]
-    dfs = df[songs_cols]
-    copy_into_table("songs", engine, dfs, cols=songs_cols)

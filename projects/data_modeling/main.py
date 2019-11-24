@@ -1,3 +1,4 @@
+import sys
 import os
 from config import instrument
 
@@ -16,22 +17,49 @@ if not os.getenv("SKIP_INSTRUMENT"):
     instrument()
 
 
-def main():
+def _get_engine(
+    database: str = "studentdb", user: str = "student", password: str = "student"
+):
+    conn_params = get_conn_params(database=database, user=user, password=password)
+    return get_engine(conn_params["type"], conn_params)
+
+
+def test(engine):
+    logger.info("Running basic set of tests...")
+
+    select_queries = ["SELECT * FROM artists LIMIT 5;"]
+
+    for q in select_queries:
+        res = query_executor(engine, q)
+        logger.info(res)
+
+
+def main(run_test: bool = False, refresh_database: bool = False):
     """Runs through the main process."""
-    conn_params = get_conn_params()
-    engine = get_engine(conn_params["type"], conn_params)
+    if refresh_database:
+        engine = _get_engine()
+        create_database(engine=engine, db_name="sparkifydb")
 
-    db_name = "sparkifydb"
-    create_database(engine=engine, db_name=db_name)
-    conn_params = get_conn_params(database=db_name)
-    engine = get_engine(conn_params["type"], conn_params)
-
+    engine = _get_engine(database="sparkifydb")
     drop_tables(engine)
     create_tables(engine)
 
+    engine = _get_engine(database="sparkifydb")
+
     process_song_data(engine, filepath="data/song_data")
-    process_log_data(engine, filepath="data/log_data")
+    # process_log_data(engine, filepath="data/log_data")
+
+    if run_test:
+        test(engine)
 
 
 if __name__ == "__main__":
-    main()
+    args = sys.argv[1:]
+    run_test = "--run-test" in args
+    refresh_database = "--refresh" in args
+    if run_test:
+        logger.info(f"running with test...")
+    if refresh_database:
+        logger.info(f"running with a fresh database")
+
+    main(run_test=run_test, refresh_database=refresh_database)
