@@ -9,6 +9,7 @@ psycopg2 = "*"
 sqlalchemy = "*"
 colorama = "*"
 pandas = "*"
+stringcase = "*"
 
 [dev-packages]
 black = "*"

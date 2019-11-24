@@ -32,7 +32,7 @@ def test(engine):
     def select_query(table: str, limit: int = default_limit):
         return f"SELECT * from {table} LIMIT {limit}"
 
-    tables = ["songs", "artists"]
+    tables = ["songs", "artists", "users"]
 
     for q in map(select_query, tables):
         results = query_executor(engine, q)
@@ -55,7 +55,7 @@ def main(run_test: bool = False, refresh_database: bool = False):
     engine = _get_engine(database="sparkifydb")
 
     process_song_data(engine, filepath="data/song_data")
-    # process_log_data(engine, filepath="data/log_data")
+    process_log_data(engine, filepath="data/log_data")
 
     if run_test:
         test(engine)

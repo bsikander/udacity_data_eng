@@ -6,6 +6,7 @@ import typing as T
 import json
 
 import sqlalchemy as sa
+import stringcase
 
 from db.postgres import copy_to_postgres
 
@@ -27,13 +28,9 @@ def get_files(path, ext: str = "json"):
 
 def clean_cols(df, drop_cols: T.List[str] = []):
     """Normalize column names of a dataframe."""
-    df.columns = (
-        df.columns.str.strip()
-        .str.lower()
-        .str.replace(" ", "_")
-        .str.replace("(", "")
-        .str.replace(")", "")
-    )
+
+    df.columns = df.columns.str.strip().str.replace("(", "").str.replace(")", "")
+    df.columns = map(stringcase.snakecase, df.columns)
     df = df.drop(columns=drop_cols)
     return df
 
@@ -66,7 +63,7 @@ def process_log_data(engine, filepath):
 
     def process_log_file(filename: str):
         """Loads a log file, sanitizes it, and returns a dataframe."""
-        df = pd.read_json(filename, orient="records")
+        df = pd.read_json(filename, lines=True)
         drop_cols = ["user_agent", "method", "session_id", "status"]
         df = clean_cols(df, drop_cols)
 
@@ -75,13 +72,14 @@ def process_log_data(engine, filepath):
         # ts, userAgent, userId
 
         # convert timestamp column to datetime
-        df["ts"] = pd.to_datetime(df["ts"], unit="s")
+        df["ts"] = pd.to_datetime(df["ts"], unit="ms", infer_datetime_format=True)
 
         return df
 
+    logger.info(f"Processing files in {filepath}...")
     all_files = get_files(filepath)
 
-    logger.info("Reading log data from json to df...")
+    logger.info("Loading data from each file in {filepath} to one dataframe...")
     df = pd.DataFrame()
     for idx, f in enumerate(all_files, 1):
         dfa = process_log_file(f)
@@ -93,6 +91,9 @@ def process_log_data(engine, filepath):
     copy_into_table("users", engine, dfu, cols=user_cols)
 
     # copy into time table
+    import ipdb
+
+    ipdb.set_trace()
     time_cols = ["start_time", "hour", "day", "week", "month", "year", "weekday"]
 
     # song plays table
@@ -121,9 +122,10 @@ def process_song_data(engine, filepath):
         df = clean_cols(df)
         return df
 
+    logger.info(f"Processing files in {filepath}...")
     all_files = get_files(filepath)
 
-    logger.info("Reading song data from json to df...")
+    logger.info("Loading data from each file in {filepath} to one dataframe...")
     df = pd.DataFrame()
     for idx, f in enumerate(all_files, 1):
         dfa = file_to_df(f)
