@@ -5,7 +5,6 @@ import logging
 import typing as T
 import json
 
-
 import sqlalchemy as sa
 
 from config import instrument
@@ -17,26 +16,40 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
+def get_files(path, ext: str = "json"):
+    """return all files matching extension from a directory."""
+    all_files = []
+    for root, dirs, files in os.walk(path):
+        files = glob.glob(os.path.join(root, f"*.{ext}"))
+        for f in files:
+            all_files.append(os.path.abspath(f))
+
+    logger.info(f"{len(files)} files found in {path}")
+    return all_files
+
+
+def clean_cols(df):
+    """Normalize column names of a dataframe."""
+    df.columns = (
+        df.columns.str.strip()
+        .str.lower()
+        .str.replace(" ", "_")
+        .str.replace("(", "")
+        .str.replace(")", "")
+    )
+    return df
+
+
 def process_song_file(filename: str):
     """Loads a song file and returns a dataframe."""
     data = json.load(open(filename))
     df = pd.DataFrame.from_records([data])
+    df = clean_cols(df)
     return df
 
 
 def process_log_file(filename: str):
     """Loads a log file, sanitizes it, and returns a dataframe."""
-
-    def clean_cols(df):
-        df.columns = (
-            df.columns.str.strip()
-            .str.lower()
-            .str.replace(" ", "_")
-            .str.replace("(", "")
-            .str.replace(")", "")
-        )
-        return df
-
     df = pd.read_json(filename, orient="records")
     # artist, auth, firstName, gender, itemInSession, lastName, length,
     # level, location, method, page, registration, sessionId, song, status,
@@ -58,33 +71,27 @@ def process_log_file(filename: str):
     return df
 
 
-def get_files(path, ext: str = "json"):
-    """return all files matching extension from a directory."""
-    all_files = []
-    for root, dirs, files in os.walk(path):
-        files = glob.glob(os.path.join(root, f"*.{ext}"))
-        for f in files:
-            all_files.append(os.path.abspath(f))
-
-    logger.info(f"{len(files)} files found in {path}")
-    return all_files
-
-
 def copy_into_table(
     table: str,
     engine: sa.engine.base.Engine,
     df: pd.DataFrame,
     cols: T.List[str] = None,
-    delimiter: str = ",",
+    delimiter: str = "\t",
     null_string: str = "",
 ) -> bool:
     """Uses COPY command to load data to an existing Postgres table."""
-    logger.info(f"Copying into table {table}...")
     buf = df.to_csv(
         sep=delimiter, na_rep=null_string, columns=cols, header=False, index=False
     )
-    logger.info(buf)
-    copy_to_postgres(engine, buf, table, validate=True, sep=delimiter, null=null_string)
+    copy_to_postgres(
+        engine,
+        buf,
+        table,
+        sep=delimiter,
+        null_string=null_string,
+        columns=cols,
+        validate=True,
+    )
 
 
 def process_data(engine, filepath, load_fn):
@@ -98,17 +105,24 @@ def process_data(engine, filepath, load_fn):
 
     artists_cols = [
         "artist_id",
-        "artist_name",
-        "artist_location",
-        "artist_latitude",
-        "artist_longitude",
+        "name",
+        "location",
+        "latitude",
+        "longitute",
     ]
-    songs_cols = ["song_id", "title", "artist_id", "year", "duration"]
-    users_cols = ["user_id", "first_name", "last_name", "gender", "level"]
+    dfa = df.rename(
+        columns={
+            "artist_name": "name",
+            "artist_location": "location",
+            "artist_latitude": "latitude",
+            "artist_longitude": "longitute",
+        }
+    )[artists_cols]
+    copy_into_table("artists", engine, dfa, cols=artists_cols)
 
-    copy_into_table("songs", engine=engine, df=df, cols=songs_cols)
-    copy_into_table("artists", engine=engine, df=df, cols=artists_cols)
-    copy_into_table("users", engine=engine, df=df, cols=users_cols)
+    songs_cols = ["song_id", "title", "artist_id", "year", "duration"]
+    dfs = df[songs_cols]
+    copy_into_table("songs", engine, dfs, cols=songs_cols)
 
 
 def main():

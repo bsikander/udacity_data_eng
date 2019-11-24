@@ -1,7 +1,8 @@
 """Utilities for interacting purely with Postgres."""
-import sqlalchemy as sa
+import typing as T
 import logging
 
+import sqlalchemy as sa
 from io import StringIO
 
 logger = logging.getLogger(__name__)
@@ -42,19 +43,31 @@ def copy_to_postgres(
     engine: sa.engine.base.Engine,
     data: str,
     table: str,
+    columns: T.List[str] = None,
+    sep: str = "\t",
+    null_string: str = "",
+    size: int = 8192,
     validate: bool = False,
-    **kwargs,
+    verbose: bool = False,
 ):
     """Execute COPY FROM query in Postgres safely."""
     conn = engine.raw_connection()
     cur = conn.cursor()
 
+    logger.info(f"Copying into table {table}...")
+    if verbose:
+        logger.info(data)
+
     try:
-        results = cur.copy_from(StringIO(data), table, **kwargs)
+        results = cur.copy_from(
+            StringIO(data), table, sep=sep, null=null_string, size=size, columns=columns
+        )
         if validate:
-            cur.execute(f"SELECT count(*) from {table}")
+            query = f"SELECT count(*) from {table}"
+            logger.info(query)
+            cur.execute(query)
             select_results = cur.fetchall()
-            logger.info(select_results)
+            logger.info(f"{select_results[0][0]} rows uploaded to {table}")
     finally:
         conn.close()
         engine.dispose()
