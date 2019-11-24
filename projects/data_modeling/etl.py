@@ -28,7 +28,7 @@ def get_files(path, ext: str = "json"):
     return all_files
 
 
-def clean_cols(df):
+def clean_cols(df, drop_cols: T.List[str] = []):
     """Normalize column names of a dataframe."""
     df.columns = (
         df.columns.str.strip()
@@ -37,37 +37,7 @@ def clean_cols(df):
         .str.replace("(", "")
         .str.replace(")", "")
     )
-    return df
-
-
-def process_song_file(filename: str):
-    """Loads a song file and returns a dataframe."""
-    data = json.load(open(filename))
-    df = pd.DataFrame.from_records([data])
-    df = clean_cols(df)
-    return df
-
-
-def process_log_file(filename: str):
-    """Loads a log file, sanitizes it, and returns a dataframe."""
-    df = pd.read_json(filename, orient="records")
-    # artist, auth, firstName, gender, itemInSession, lastName, length,
-    # level, location, method, page, registration, sessionId, song, status,
-    # ts, userAgent, userId
-
-    df = clean_cols(df)
-
-    # df.rename(columns={"A": "a", "B": "c"})
-
-    # filter by NextSong action
-
-    # convert timestamp column to datetime
-
-    # insert time data
-
-    # insert user records
-
-    # insert songplay records
+    df = df.drop(columns=drop_cols)
     return df
 
 
@@ -94,13 +64,72 @@ def copy_into_table(
     )
 
 
-def process_data(engine, filepath, load_fn):
+def process_log_data(engine, filepath):
+    """Extracts, transforms, and loads log data."""
+
+    def process_log_file(filename: str):
+        """Loads a log file, sanitizes it, and returns a dataframe."""
+        df = pd.read_json(filename, orient="records")
+        drop_cols = ["user_agent", "method", "session_id", "status"]
+        df = clean_cols(df, drop_cols)
+
+        # artist, auth, firstName, gender, itemInSession, lastName, length,
+        # level, location, method, page, registration, sessionId, song, status,
+        # ts, userAgent, userId
+
+        # convert timestamp column to datetime
+        df["ts"] = pd.to_datetime(df["ts"], unit="s")
+
+        return df
+
     all_files = get_files(filepath)
 
+    logger.info("Reading log data from json to df...")
     df = pd.DataFrame()
-    logger.info("Reading data from json to df...")
     for idx, f in enumerate(all_files, 1):
-        dfa = load_fn(f)
+        dfa = process_log_file(f)
+        df = df.append(dfa)
+
+    # copy into users table
+    user_cols = ["user_id", "first_name", "last_name", "gender", "level"]
+    dfu = df[user_cols].drop_duplicates(subset="user_id", keep=False)
+    copy_into_table("users", engine, dfu, cols=user_cols)
+
+    # copy into time table
+    time_cols = ["start_time", "hour", "day", "week", "month", "year", "weekday"]
+
+    # song plays table
+    dfsp = df.loc[df["page"] == "NextSong"]
+    song_plays_cols = [
+        "songplay_id",
+        "start_time",
+        "user_id",
+        "song_id",
+        "artist_id",
+        "session_id",
+        "level",
+        "location",
+        "user_agent",
+    ]
+
+
+def process_song_data(engine, filepath):
+    """Extracts, transforms, and loads song data."""
+
+    def file_to_df(filename: str):
+        """Loads a song file and returns a dataframe."""
+        data = json.load(open(filename))
+        df = pd.DataFrame.from_records([data], sort=False)
+        # TODO: drop some cols
+        df = clean_cols(df)
+        return df
+
+    all_files = get_files(filepath)
+
+    logger.info("Reading song data from json to df...")
+    df = pd.DataFrame()
+    for idx, f in enumerate(all_files, 1):
+        dfa = file_to_df(f)
         df = df.append(dfa)
 
     artists_cols = [
@@ -118,6 +147,7 @@ def process_data(engine, filepath, load_fn):
             "artist_longitude": "longitute",
         }
     )[artists_cols]
+    dfa.drop_duplicates(subset="artist_id", keep=False, inplace=True)
     copy_into_table("artists", engine, dfa, cols=artists_cols)
 
     songs_cols = ["song_id", "title", "artist_id", "year", "duration"]
@@ -130,8 +160,8 @@ def main():
     conn_params = get_conn_params(database=db_name)
     engine = get_engine(conn_params["type"], conn_params)
 
-    process_data(engine, filepath="data/song_data", load_fn=process_song_file)
-    process_data(engine, filepath="data/log_data", func=process_log_file)
+    process_song_data(engine, filepath="data/song_data")
+    process_log_data(engine, filepath="data/log_data")
 
 
 if not os.getenv("SKIP_INSTRUMENT"):
