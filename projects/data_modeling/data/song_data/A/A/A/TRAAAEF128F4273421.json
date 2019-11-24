@@ -1,12 +1,1 @@
-{
-  "artist_id": "AR7G5I41187FB4CE6C",
-  "artist_latitude": null,
-  "artist_location": "London, England",
-  "artist_longitude": null,
-  "artist_name": "Adam Ant",
-  "duration": 233.40363,
-  "num_songs": 1,
-  "song_id": "SONHOTT12A8C13493C",
-  "title": "Something Girls",
-  "year": 1982
-}
+{"num_songs": 1, "artist_id": "AR7G5I41187FB4CE6C", "artist_latitude": null, "artist_longitude": null, "artist_location": "London, England", "artist_name": "Adam Ant", "song_id": "SONHOTT12A8C13493C", "title": "Something Girls", "duration": 233.40363, "year": 1982}
