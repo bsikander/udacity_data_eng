@@ -3,17 +3,16 @@ def get_drop_table_query(table: str):
     return f"DROP TABLE IF EXISTS {table}"
 
 
-def song_select(song, artist, duration):
-    return f"""
-    SELECT
-        songs.artist_id as artist_id,
-        songs.song_id as song_id
-    FROM songs
-    LEFT JOIN artists on artists.artist_id = songs.artist_id
-    WHERE songs.title = {song}
-    AND songs.duration = {duration}
-    AND artists.name = {artist}
-    """
+song_select = """
+SELECT
+    songs.artist_id as artist_id,
+    songs.song_id as song_id
+FROM songs
+LEFT JOIN artists on artists.artist_id = songs.artist_id
+WHERE songs.title = %s
+AND artists.name = %s
+AND songs.duration = %s
+"""
 
 
 # create tables

@@ -106,10 +106,18 @@ def process_log_data(engine, filepath):
     # copy in to songplays table
     dfsp = df.rename(columns={"ts": "start_time"})
 
-    for _idx, row in dfsp.iterrows():
-        result = song_select(
-            song=row["song"], artist=row["artist"], duration=row["length"]
-        )
+    # this didn't find shit
+    # conn = engine.raw_connection()
+    # cur = conn.cursor()
+    # for _idx, row in dfsp.iterrows():
+    #     # get songid and artistid from song and artist tables
+    #     cur.execute(song_select, (row.song, row.artist, row.length))
+    #     results = cur.fetchone()
+    #     if results:
+    #         import ipdb; ipdb.set_trace()
+    #         song_id, artist_id = results
+    #     else:
+    #         song_id, artist_id = None, None
 
     songplays_cols = [
         "artist_id",
