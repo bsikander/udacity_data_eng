@@ -32,7 +32,7 @@ def test(engine):
     def select_query(table: str, limit: int = default_limit):
         return f"SELECT * from {table} LIMIT {limit}"
 
-    tables = ["songs", "artists", "users"]
+    tables = ["songs", "artists", "users", "time"]
 
     for q in map(select_query, tables):
         results = query_executor(engine, q)

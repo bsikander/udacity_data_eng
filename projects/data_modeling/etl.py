@@ -66,14 +66,6 @@ def process_log_data(engine, filepath):
         df = pd.read_json(filename, lines=True)
         drop_cols = ["user_agent", "method", "session_id", "status"]
         df = clean_cols(df, drop_cols)
-
-        # artist, auth, firstName, gender, itemInSession, lastName, length,
-        # level, location, method, page, registration, sessionId, song, status,
-        # ts, userAgent, userId
-
-        # convert timestamp column to datetime
-        df["ts"] = pd.to_datetime(df["ts"], unit="ms", infer_datetime_format=True)
-
         return df
 
     logger.info(f"Processing files in {filepath}...")
@@ -91,13 +83,27 @@ def process_log_data(engine, filepath):
     copy_into_table("users", engine, dfu, cols=user_cols)
 
     # copy into time table
+
+    # filter records by NextSong action
+    dfns = df.loc[df["page"] == "NextSong"]
+    # convert timestamp column to datetime
+    dfns["ts"] = pd.to_datetime(dfns["ts"], unit="ms", infer_datetime_format=True)
+    # extract timeinfo from ts and split to new cols
+    time_cols = ["hour", "day", "week", "month", "year", "weekday"]
+    for col in time_cols:
+        # TODO: fix the warnings
+        ts = dfns["ts"]
+        dfns[col] = getattr(ts.dt, col)
+
+    time_cols.append("start_time")
+    dfns = dfns.rename(columns={"ts": "start_time"})[time_cols]
+    copy_into_table("time", engine, dfns, cols=time_cols)
+
     import ipdb
 
     ipdb.set_trace()
-    time_cols = ["start_time", "hour", "day", "week", "month", "year", "weekday"]
 
     # song plays table
-    dfsp = df.loc[df["page"] == "NextSong"]
     song_plays_cols = [
         "songplay_id",
         "start_time",
