@@ -1,8 +1,9 @@
 this repo contains my study notes & projects for udacity's [data engineering nanodegree program](https://www.udacity.com/course/data-engineer-nanodegree--nd027)
 
 ## data modeling
-* [x] project: data modeling w/ postgres. due **nov 25, 2019**.
-* [ ] project: data modeling w/ apache cassandra
+* [x] project: data modeling w/ postgres. due **nov 25, 2019**. 
+  * submitted
+* [ ] project: data modeling w/ apache cassandra. due **dec 8, 2019**
 
 #### quick links
 - [postgres on mac](https://www.codementor.io/engineerapart/getting-started-with-postgresql-on-mac-osx-are8jcopb)
