@@ -13,9 +13,10 @@
 
 or
 ```
-➜  data_modeling git:(master) pip install -r requirements.txt
-➜  data_modeling git:(master) pip install -r requirements-dev.txt
+➜  data_modeling git:(master) make install
 ```
+
+see output here: https://gist.github.com/pwen/dba568665552fdde63b50b7e3860a5ef
 
 #### spin up postgres inside docker
 ```
@@ -23,7 +24,7 @@ or
 ➜  data_modeling git:(master) make up
 ```
 
-you should get something like this: `setup.output`
+see output here: https://gist.github.com/pwen/ca8cb2255ab3ff5d8a32127f8a0e1cab
 
 ### run the program
 
@@ -31,7 +32,7 @@ you should get something like this: `setup.output`
 ➜  data_modeling git:(master) python main.py --refresh --run-test
 ```
 
-see an example output: `main.output`
+see output here: https://gist.github.com/pwen/847233b4237d2a4c11c93c6482b6bb15
 
 ## design notes
 

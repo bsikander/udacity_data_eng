@@ -4,6 +4,9 @@ clean:
 up:
 	docker-compose up
 
+install:
+	pip install -r requirements.txt & pip install -r requirements-dev.txt
+
 down:
 	docker-compose down --remove-orphans --volumes
 
