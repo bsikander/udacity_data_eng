@@ -1,0 +1,65 @@
+➜  data_modeling git:(master) make down
+docker-compose down --remove-orphans --volumes
+Stopping data_modeling_postgres_1 ... done
+Removing data_modeling_postgres_1 ... done
+Removing network data_modeling_default
+Removing volume data_modeling_udacity_pgdata
+➜  data_modeling git:(master) ✗ make up
+docker-compose up
+Creating network "data_modeling_default" with the default driver
+Creating volume "data_modeling_udacity_pgdata" with default driver
+Creating data_modeling_postgres_1 ... done
+Attaching to data_modeling_postgres_1
+postgres_1  | The files belonging to this database system will be owned by user "postgres".
+postgres_1  | This user must also own the server process.
+postgres_1  |
+postgres_1  | The database cluster will be initialized with locale "en_US.utf8".
+postgres_1  | The default database encoding has accordingly been set to "UTF8".
+postgres_1  | The default text search configuration will be set to "english".
+postgres_1  |
+postgres_1  | Data page checksums are disabled.
+postgres_1  |
+postgres_1  | fixing permissions on existing directory /var/lib/postgresql/data ... ok
+postgres_1  | creating subdirectories ... ok
+postgres_1  | selecting default max_connections ... 100
+postgres_1  | selecting default shared_buffers ... 128MB
+postgres_1  | selecting default timezone ... Etc/UTC
+postgres_1  | selecting dynamic shared memory implementation ... posix
+postgres_1  | creating configuration files ... ok
+postgres_1  | running bootstrap script ... ok
+postgres_1  | performing post-bootstrap initialization ... ok
+postgres_1  | syncing data to disk ... ok
+postgres_1  |
+postgres_1  | Success. You can now start the database server using:
+postgres_1  |
+postgres_1  |     pg_ctl -D /var/lib/postgresql/data -l logfile start
+postgres_1  |
+postgres_1  |
+postgres_1  | WARNING: enabling "trust" authentication for local connections
+postgres_1  | You can change this by editing pg_hba.conf or using the option -A, or
+postgres_1  | --auth-local and --auth-host, the next time you run initdb.
+postgres_1  | waiting for server to start....2019-11-24 08:25:46.773 UTC [44] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+postgres_1  | 2019-11-24 08:25:46.785 UTC [45] LOG:  database system was shut down at 2019-11-24 08:25:46 UTC
+postgres_1  | 2019-11-24 08:25:46.790 UTC [44] LOG:  database system is ready to accept connections
+postgres_1  |  done
+postgres_1  | server started
+postgres_1  | CREATE DATABASE
+postgres_1  |
+postgres_1  |
+postgres_1  | /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+postgres_1  |
+postgres_1  | waiting for server to shut down...2019-11-24 08:25:47.199 UTC [44] LOG:  received fast shutdown request
+postgres_1  | .2019-11-24 08:25:47.201 UTC [44] LOG:  aborting any active transactions
+postgres_1  | 2019-11-24 08:25:47.203 UTC [44] LOG:  background worker "logical replication launcher" (PID 51) exited with exit code 1
+postgres_1  | 2019-11-24 08:25:47.204 UTC [46] LOG:  shutting down
+postgres_1  | 2019-11-24 08:25:47.215 UTC [44] LOG:  database system is shut down
+postgres_1  |  done
+postgres_1  | server stopped
+postgres_1  |
+postgres_1  | PostgreSQL init process complete; ready for start up.
+postgres_1  |
+postgres_1  | 2019-11-24 08:25:47.313 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+postgres_1  | 2019-11-24 08:25:47.313 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+postgres_1  | 2019-11-24 08:25:47.315 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+postgres_1  | 2019-11-24 08:25:47.327 UTC [62] LOG:  database system was shut down at 2019-11-24 08:25:47 UTC
+postgres_1  | 2019-11-24 08:25:47.331 UTC [1] LOG:  database system is ready to accept connections
