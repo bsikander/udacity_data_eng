@@ -9,6 +9,8 @@ import sqlalchemy as sa
 import stringcase
 
 from db.postgres import copy_to_postgres
+from db import query_executor
+from sql_queries import song_select
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -21,17 +23,20 @@ def get_files(path, ext: str = "json"):
         files = glob.glob(os.path.join(root, f"*.{ext}"))
         for f in files:
             all_files.append(os.path.abspath(f))
-
     logger.info(f"{len(files)} files found in {path}")
     return all_files
 
 
-def clean_cols(df, drop_cols: T.List[str] = []):
+def clean_cols(df, drop_cols: T.List[str] = None):
     """Normalize column names of a dataframe."""
 
     df.columns = df.columns.str.strip().str.replace("(", "").str.replace(")", "")
     df.columns = map(stringcase.snakecase, df.columns)
-    df = df.drop(columns=drop_cols)
+
+    # drop cols
+    if drop_cols is not None:
+        df = df.drop(columns=drop_cols)
+
     return df
 
 
@@ -64,7 +69,7 @@ def process_log_data(engine, filepath):
     def process_log_file(filename: str):
         """Loads a log file, sanitizes it, and returns a dataframe."""
         df = pd.read_json(filename, lines=True)
-        drop_cols = ["user_agent", "method", "session_id", "status"]
+        drop_cols = ["method", "status", "item_in_session", "auth"]
         df = clean_cols(df, drop_cols)
         return df
 
@@ -79,42 +84,62 @@ def process_log_data(engine, filepath):
 
     # copy into users table
     user_cols = ["user_id", "first_name", "last_name", "gender", "level"]
-    dfu = df[user_cols].drop_duplicates(subset="user_id", keep=False)
+    dfu = df[user_cols].drop_duplicates(subset="user_id")
     copy_into_table("users", engine, dfu, cols=user_cols)
 
     # copy into time table
-
     # filter records by NextSong action
-    dfns = df.loc[df["page"] == "NextSong"]
+    df = df.loc[df["page"] == "NextSong"]
     # convert timestamp column to datetime
-    dfns["ts"] = pd.to_datetime(dfns["ts"], unit="ms", infer_datetime_format=True)
+    df["ts"] = pd.to_datetime(df["ts"], unit="ms", infer_datetime_format=True)
     # extract timeinfo from ts and split to new cols
     time_cols = ["hour", "day", "week", "month", "year", "weekday"]
     for col in time_cols:
         # TODO: fix the warnings
-        ts = dfns["ts"]
-        dfns[col] = getattr(ts.dt, col)
+        ts = df["ts"]
+        df[col] = getattr(ts.dt, col)
 
     time_cols.append("start_time")
-    dfns = dfns.rename(columns={"ts": "start_time"})[time_cols]
+    dfns = df.rename(columns={"ts": "start_time"})[time_cols]
     copy_into_table("time", engine, dfns, cols=time_cols)
 
-    import ipdb
+    # copy in to songplays table
+    dfsp = df.rename(columns={"ts": "start_time"})
 
-    ipdb.set_trace()
+    for _idx, row in dfsp.iterrows():
+        result = song_select(
+            song=row["song"], artist=row["artist"], duration=row["length"]
+        )
 
-    # song plays table
-    song_plays_cols = [
-        "songplay_id",
+    songplays_cols = [
+        "artist_id",
+        "song_id",
         "start_time",
         "user_id",
-        "song_id",
-        "artist_id",
         "session_id",
         "level",
         "location",
         "user_agent",
     ]
+
+    artist_names = df.artist.dropna().unique()
+    song_titles = df.song.dropna().unique()
+
+    query = "SELECT artist_id, name FROM artists;"
+    results = query_executor(engine, query)
+    artist_dict = dict((y, x) for x, y in results)
+    dfsp["artist_id"] = dfsp["artist"].map(artist_dict)
+
+    # dfsp[dfsp['artist'].isin(artist_dict.keys())]
+
+    query = "SELECT song_id, title FROM songs;"
+    results = query_executor(engine, query)
+    song_dict = dict((y, x) for x, y in results)
+    dfsp["song_id"] = dfsp["song"].map(song_dict)
+
+    dfsp = dfsp[songplays_cols]
+
+    copy_into_table("songplays", engine, dfsp, cols=songplays_cols)
 
 
 def process_song_data(engine, filepath):
@@ -124,7 +149,6 @@ def process_song_data(engine, filepath):
         """Loads a song file and returns a dataframe."""
         data = json.load(open(filename))
         df = pd.DataFrame.from_records([data])
-        # TODO: drop some cols
         df = clean_cols(df)
         return df
 
@@ -140,6 +164,7 @@ def process_song_data(engine, filepath):
     # songs table
     songs_cols = ["song_id", "title", "artist_id", "year", "duration"]
     dfs = df[songs_cols]
+    dfs.drop_duplicates(subset="song_id", inplace=True)
     copy_into_table("songs", engine, dfs, cols=songs_cols)
 
     # artists table
@@ -158,5 +183,5 @@ def process_song_data(engine, filepath):
             "artist_longitude": "longitute",
         }
     )[artists_cols]
-    dfa.drop_duplicates(subset="artist_id", keep=False, inplace=True)
+    dfa.drop_duplicates(subset="artist_id", inplace=True)
     copy_into_table("artists", engine, dfa, cols=artists_cols)

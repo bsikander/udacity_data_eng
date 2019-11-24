@@ -3,6 +3,19 @@ def get_drop_table_query(table: str):
     return f"DROP TABLE IF EXISTS {table}"
 
 
+def song_select(song, artist, duration):
+    return f"""
+    SELECT
+        songs.artist_id as artist_id,
+        songs.song_id as song_id
+    FROM songs
+    LEFT JOIN artists on artists.artist_id = songs.artist_id
+    WHERE songs.title = {song}
+    AND songs.duration = {duration}
+    AND artists.name = {artist}
+    """
+
+
 # create tables
 songplay_table_create = """
 CREATE TABLE songplays (
@@ -75,26 +88,3 @@ drop_table_queries = [
     get_drop_table_query("artists"),
     get_drop_table_query("time"),
 ]
-
-# INSERT RECORDS
-
-songplay_table_insert = """
-"""
-
-user_table_insert = """
-"""
-
-song_table_insert = """
-"""
-
-artist_table_insert = """
-"""
-
-
-time_table_insert = """
-"""
-
-# FIND SONGS
-
-song_select = """
-"""
