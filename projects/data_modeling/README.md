@@ -4,19 +4,29 @@
 
 ### setup
 
-*libraries*
-> pipenv install
+*install dependencies*
+```
+➜  data_modeling git:(master) pipenv install
+```
+
 or
-> pip install -r requirements.txt
-> pip install -r requirements-text.txt
+```
+➜  data_modeling git:(master) pip install -r requirements.txt
+➜  data_modeling git:(master) pip install -r requirements-text.txt
+```
 
 *spin up docker contianer for pg*
-> make down
-> make up
+```
+➜  data_modeling git:(master) make down
+➜  data_modeling git:(master) make up
+```
 
 you should get something like this: `setup.output`
 
 ### run the program
-> python main.py --refresh --run-test
+
+```
+➜  data_modeling git:(master) python main.py --refresh --run-test
+```
 
 see an example output: `main.output`
