@@ -62,5 +62,5 @@ see output [here](https://gist.github.com/pwen/847233b4237d2a4c11c93c6482b6bb15)
 `db/*` contains functions primarily concerned w/ operations on a data store. 
 - i intend to extend this to include other data stores, e.g. cassandra; hence the factory pattern.
 
-#### tl;dr
+#### additional thoughts
 it's probably an overkill for the scope of this project but i really wanted to use this as an opportunity to learn python and specifically working with certain libraries e.g. database-related (`sqlalchemy` & `psycopg`) and `pandas`. and i had tons of fun doing just that! 
