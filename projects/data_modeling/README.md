@@ -1,3 +1,5 @@
+## instructions
+
 ### requirement
 - python 3.6
 - [optional] docker & docker-compose (for postgres setup)
@@ -30,3 +32,5 @@ you should get something like this: `setup.output`
 ```
 
 see an example output: `main.output`
+
+## design notes
