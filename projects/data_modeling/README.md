@@ -54,8 +54,8 @@ see output [here](https://gist.github.com/pwen/847233b4237d2a4c11c93c6482b6bb15)
 - notes on generating `songplays` fact table:
   * i had `song_select` query written down in `sql_queries.py` and decided not to use it mostly because doing a `SELECT` with `JOIN` on each row can be very expensive; especially for event-streaming files e.g. log files. 
   * instead, i did `SELECT` once from `songs` and `artists` and created a dict for mapping:
-    * for `artists`: `{"<artist_name>": "artist_id"}`, e.g. `{'Adam Ant': 'AR7G5I41187FB4CE6C', 'Planet P Project': 'AR8ZCNI1187B9A069B'...}`
-    * for `songs`, i used a tuple of title and duration as a composite key: `{"(<song_title>, <song_duration>)": "<song_id>"}`, e.g. `{('Something Girls', 233.40363): 'SONHOTT12A8C13493C', ('Pink World', 269.81832): 'SOIAZJW12AB01853F1'...}`
+    * for *artists*: `{"<artist_name>": "artist_id"}`, e.g. `{'Adam Ant': 'AR7G5I41187FB4CE6C', 'Planet P Project': 'AR8ZCNI1187B9A069B'...}`
+    * for *songs*, i used a tuple of title and duration as a composite key: `{"(<song_title>, <song_duration>)": "<song_id>"}`, e.g. `{('Something Girls', 233.40363): 'SONHOTT12A8C13493C', ('Pink World', 269.81832): 'SOIAZJW12AB01853F1'...}`
   * and then used the dict to map `song` to `song_id`, and `artist` to `artist_id` (fill na with none values).
   * 👌🏼in this way i was able to minimize the numeber of calls to the database, and did most of the work **on the dataframe itself**. 
   
