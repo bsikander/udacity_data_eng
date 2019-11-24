@@ -52,7 +52,11 @@ def test(engine):
 
 
 def main(run_test: bool = False, refresh_database: bool = False):
-    """Runs through the main process."""
+    """Runs through the main process.
+
+    :params run_test: if True, runs a basic set of tests to ensure data integrity.
+    :params refresh_database: if True, recreates the sparkifydb database.
+    """
     if refresh_database:
         engine = _get_engine()
         create_database(engine=engine, db_name="sparkifydb")
