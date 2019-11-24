@@ -34,3 +34,5 @@ you should get something like this: `setup.output`
 see an example output: `main.output`
 
 ## design notes
+
+TODO: Add more cmments & make sure they are used effectively; each function has a docstring.
