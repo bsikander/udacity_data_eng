@@ -10,7 +10,6 @@ import stringcase
 
 from db.postgres import copy_to_postgres
 from db import query_executor
-from sql_queries import song_select
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -29,7 +28,6 @@ def get_files(path, ext: str = "json"):
 
 def clean_cols(df, drop_cols: T.List[str] = None):
     """Normalize column names of a dataframe."""
-
     df.columns = df.columns.str.strip().str.replace("(", "").str.replace(")", "")
     df.columns = map(stringcase.snakecase, df.columns)
 
@@ -47,7 +45,11 @@ def copy_into_table(
     delimiter: str = "\t",
     null_string: str = "",
 ) -> bool:
-    """Uses COPY command to load data to an existing Postgres table."""
+    """Loads data to an existing Postgres table.
+
+    Dumps a dataframe to a csv string buffer, and then uploads the data to an
+    existing Postgres table using COPY command.
+    """
     buf = df.to_csv(
         sep=delimiter, na_rep=null_string, columns=cols, header=False, index=False
     )
@@ -105,6 +107,16 @@ def process_log_data(engine, filepath):
     # copy in to songplays table
     df_song_play = df.rename(columns={"ts": "start_time"})
 
+    query = "SELECT artist_id, name FROM artists;"
+    results = query_executor(engine, query)
+    artist_dict = dict((y, x) for x, y in results)
+    df_song_play["artist_id"] = df_song_play["artist"].map(artist_dict)
+
+    query = "SELECT song_id, title FROM songs;"
+    results = query_executor(engine, query)
+    song_dict = dict((y, x) for x, y in results)
+    df_song_play["song_id"] = df_song_play["song"].map(song_dict)
+
     songplays_cols = [
         "artist_id",
         "song_id",
@@ -115,16 +127,6 @@ def process_log_data(engine, filepath):
         "location",
         "user_agent",
     ]
-
-    query = "SELECT artist_id, name FROM artists;"
-    results = query_executor(engine, query)
-    artist_dict = dict((y, x) for x, y in results)
-    df_song_play["artist_id"] = df_song_play["artist"].map(artist_dict)
-
-    query = "SELECT song_id, title FROM songs;"
-    results = query_executor(engine, query)
-    song_dict = dict((y, x) for x, y in results)
-    df_song_play["song_id"] = df_song_play["song"].map(song_dict)
     df_song_play = df_song_play[songplays_cols]
 
     copy_into_table("songplays", engine, df_song_play, cols=songplays_cols)

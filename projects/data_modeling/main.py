@@ -20,20 +20,20 @@ if not os.getenv("SKIP_INSTRUMENT"):
 def _get_engine(
     database: str = "studentdb", user: str = "student", password: str = "student"
 ):
+    """Returns postgres engine."""
     conn_params = get_conn_params(database=database, user=user, password=password)
     return get_engine(conn_params["type"], conn_params)
 
 
 def test(engine):
+    """Runs through some basic test to ensure correctness of the tables."""
     logger.info("Running basic set of tests...")
-
     default_limit = 5
 
     def select_query(table: str, limit: int = default_limit):
         return f"SELECT * from {table} LIMIT {limit}"
 
     tables = ["songs", "artists", "users", "time", "songplays"]
-
     for q in map(select_query, tables):
         results = query_executor(engine, q)
         assert len(results) == default_limit

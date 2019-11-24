@@ -3,6 +3,8 @@ def get_drop_table_query(table: str):
     return f"DROP TABLE IF EXISTS {table}"
 
 
+# decided against using this query because running SELECT for each row can be
+# very expensive especially for event-driven files e.g. log files.
 song_select = """
 SELECT
     songs.artist_id as artist_id,
