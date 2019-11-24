@@ -64,9 +64,7 @@ def copy_to_postgres(
             StringIO(data), table, sep=sep, null=null_string, size=size, columns=columns
         )
         if validate:
-            query = f"SELECT count(*) from {table}"
-            logger.info(query)
-            cur.execute(query)
+            cur.execute(f"SELECT count(*) from {table}")
             select_results = cur.fetchall()
             logger.info(f"{select_results[0][0]} rows uploaded to {table}")
         conn.commit()

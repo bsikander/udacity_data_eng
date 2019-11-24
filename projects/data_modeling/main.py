@@ -27,11 +27,19 @@ def _get_engine(
 def test(engine):
     logger.info("Running basic set of tests...")
 
-    select_queries = ["SELECT * FROM artists LIMIT 5;"]
+    default_limit = 5
 
-    for q in select_queries:
-        res = query_executor(engine, q)
-        logger.info(res)
+    def select_query(table: str, limit: int = default_limit):
+        return f"SELECT * from {table} LIMIT {limit}"
+
+    tables = ["songs", "artists"]
+
+    for q in map(select_query, tables):
+        results = query_executor(engine, q)
+        assert len(results) == default_limit
+
+        for res in results:
+            logger.info(res)
 
 
 def main(run_test: bool = False, refresh_database: bool = False):
