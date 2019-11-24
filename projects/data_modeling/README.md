@@ -4,7 +4,7 @@
 
 ### setup
 
-*install dependencies*
+#### install dependencies
 ```
 ➜  data_modeling git:(master) pipenv install
 ```
@@ -15,7 +15,7 @@ or
 ➜  data_modeling git:(master) pip install -r requirements-text.txt
 ```
 
-*spin up docker contianer for pg*
+#### spin up postgres inside docker
 ```
 ➜  data_modeling git:(master) make down
 ➜  data_modeling git:(master) make up
