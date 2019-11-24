@@ -94,11 +94,10 @@ def process_log_data(engine, filepath):
     # copy into time table
     df = df.loc[df["page"] == "NextSong"]
     # extract timeinfo from ts and split to new cols
-    df_time = df
     time_cols = ["hour", "day", "week", "month", "year", "weekday"]
     for col in time_cols:
         ts = df["ts"]
-        df_time[col] = getattr(ts.dt, col)
+        df[col] = getattr(ts.dt, col)
 
     time_cols.append("start_time")
     df_time = df.rename(columns={"ts": "start_time"})[time_cols]
@@ -107,15 +106,23 @@ def process_log_data(engine, filepath):
     # copy in to songplays table
     df_song_play = df.rename(columns={"ts": "start_time"})
 
+    # constructs artist_id col from artist name
     query = "SELECT artist_id, name FROM artists;"
     results = query_executor(engine, query)
     artist_dict = dict((y, x) for x, y in results)
     df_song_play["artist_id"] = df_song_play["artist"].map(artist_dict)
 
-    query = "SELECT song_id, title FROM songs;"
+    # constructs song_id col from song title and duration
+    query = "SELECT song_id, title, duration FROM songs;"
     results = query_executor(engine, query)
-    song_dict = dict((y, x) for x, y in results)
-    df_song_play["song_id"] = df_song_play["song"].map(song_dict)
+    # use tuple (title, duration) as the dict key
+    song_dict = dict(((y, z), x) for x, y, z in results)
+
+    def map_song_id(row):
+        key = (row.song, row.length)
+        return song_dict.get(key, None)
+
+    df_song_play["song_id"] = df.apply(lambda row: map_song_id(row), axis=1)
 
     songplays_cols = [
         "artist_id",
@@ -135,7 +142,7 @@ def process_log_data(engine, filepath):
 def process_song_data(engine, filepath):
     """Extracts, transforms, and loads song data."""
 
-    def file_to_df(filename: str):
+    def process_song_file(filename: str):
         """Loads a song file and returns a dataframe."""
         data = json.load(open(filename))
         df = pd.DataFrame.from_records([data])
@@ -148,16 +155,16 @@ def process_song_data(engine, filepath):
     logger.info("Loading data from each file in {filepath} to one dataframe...")
     df = pd.DataFrame()
     for idx, f in enumerate(all_files, 1):
-        dfa = file_to_df(f)
+        dfa = process_song_file(f)
         df = df.append(dfa)
 
-    # songs table
+    # copy into songs table
     songs_cols = ["song_id", "title", "artist_id", "year", "duration"]
     dfs = df[songs_cols]
     dfs.drop_duplicates(subset="song_id", inplace=True)
     copy_into_table("songs", engine, dfs, cols=songs_cols)
 
-    # artists table
+    # copy into artists table
     artists_cols = [
         "artist_id",
         "name",
