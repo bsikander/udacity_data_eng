@@ -130,12 +130,16 @@ def process_log_data(engine, filepath):
     artist_dict = dict((y, x) for x, y in results)
     dfsp["artist_id"] = dfsp["artist"].map(artist_dict)
 
-    # dfsp[dfsp['artist'].isin(artist_dict.keys())]
+    logger.info(dfsp[dfsp["artist_id"].notna()])
 
     query = "SELECT song_id, title FROM songs;"
     results = query_executor(engine, query)
     song_dict = dict((y, x) for x, y in results)
     dfsp["song_id"] = dfsp["song"].map(song_dict)
+
+    # TODO: audit why there's no song found
+    common = set(song_titles) & set(song_dict.keys())
+    logger.info(common)
 
     dfsp = dfsp[songplays_cols]
 
