@@ -2,7 +2,7 @@ this repo contains my study notes & projects for udacity's [data engineering nan
 
 ## data modeling
 * [x] project: data modeling w/ postgres. due **nov 25, 2019**. 
-  * submitted
+  * submitted & passed 
 * [ ] project: data modeling w/ apache cassandra. due **dec 8, 2019**
 
 #### quick links
@@ -20,11 +20,11 @@ actual time:
 
 ## data lakes with spark
 * [ ] project: data lake. due **jan 30, 2020**
-* [ ] project: optimize your github profile
+* [ ] project: optimize your github profile **jan 31, 2020**
 
 ## data pipeline with airflow
 * [ ] project: data pipelines. due **feb 27, 2020**
-* [ ] project: improve your linkedin profile
+* [ ] project: improve your linkedin profile **feb 28, 2020**
 
 ## capstone project
 * [ ] project: data engineering capstone project. due **mar 27, 2020**
