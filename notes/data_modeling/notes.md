@@ -214,3 +214,11 @@ According to the CAP theorem, a database can actually only guarantee two out of 
 
 **Q: If Apache Cassandra is not built for consistency, won't the analytics pipeline break?**
 If I am trying to do analysis, such as determining a trend over time, e.g., how many friends does John have on Twitter, and if you have one less person counted because of "eventual consistency" (the data may not be up-to-date in all locations), that's OK. In theory, that can be an issue but only if you are not constantly updating. If the pipeline pulls data from one node and it has not been updated, then you won't get it. Remember, in Apache Cassandra it is about Eventual Consistency.
+
+### Data Modeling in Apache Cassandra:
+- **Denormalization** is not just okay -- it's a must
+- Denormalization must be done for **fast reads**
+- Apache Cassandra has been optimized for fast writes
+- ALWAYS think **queries** first
+- One table per query is a great strategy
+- Apache Cassandra **does not allow for JOINs between tables**
