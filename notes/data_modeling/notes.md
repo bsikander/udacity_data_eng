@@ -160,20 +160,38 @@ All kinds of companies. For example, Uber uses Apache Cassandra for their entire
 In a **distributed database**, in order to have **high availability**, you need copies of your data. 
 
 ### Eventual Consistency:
+
 Over time (if no new changes are made) each copy of the data will be the same, but if there are new changes, the data may be different in different locations. The data may be inconsistent for only milliseconds. There are workarounds in place to prevent getting stale data. 
 
 [Reference](https://en.wikipedia.org/wiki/Eventual_consistency). 
 
 **Q: What does the network look like?**
+
 In Apache Cassandra every node is connected to every node -- it's peer to peer database architecture.
-
-**Q: Is data deployment strategy an important element of data modeling in Apache Cassandra?**
-Deployment strategies are a great topic, but have very little to do with data modeling. Developing deployment strategies focuses on determining how many clusters to create or determining how many nodes are needed. These are topics generally covered under database architecture, database deployment and operations, which we will not cover in this lesson. 
-
-In general, the size of your data and your data model can affect your **deployment strategies**. You need to think about how to create a cluster, how many nodes should be in that cluster, how to do the actual installation. More information about deployment strategies can be found on this [DataStax documentation page](https://docs.datastax.com/en/dse-planning/doc/).
 
 **Cassandra Architecture**
 - [Understanding the architecture](https://docs.datastax.com/en/cassandra/3.0/cassandra/architecture/archTOC.html)
 - [Cassandra Architecture](https://www.tutorialspoint.com/cassandra/cassandra_architecture.htm)
+  
+- *Data Replication* in Cassandra
+  * One or more of the nodes in a cluster act as replicas for a given piece of data. If it is detected that some of the nodes responded with an out-of-date value, Cassandra will return the most recent value to the client. After returning the most recent value, Cassandra performs a **read repair** in the background to update the stale values.
+  * Cassandra uses the **Gossip Protocol** in the background to allow the nodes to communicate with each other and detect any faulty nodes in the cluster.
+  
+- Components of Cassandra
+  * **Node** − It is the place where data is stored.
+  * **Data center** − It is a collection of related nodes.
+  * **Cluster** − A cluster is a component that contains one or more data centers.
+  * **Commit log** − The commit log is a crash-recovery mechanism in Cassandra. Every write operation is written to the commit log.
+  * **Mem-table** − A mem-table is a memory-resident data structure. After commit log, the data will be written to the mem-table. Sometimes, for a single-column family, there will be multiple mem-tables.
+  * **SSTable** (sorted string table) − It is a disk file to which the data is flushed from the mem-table when its contents reach a threshold value.
+  * **Bloom filter** − These are nothing but quick, nondeterministic, algorithms for testing whether an element is a member of a set. It is a special kind of *cache*. Bloom filters are accessed after every query.
+    * [What are bloom filters?](https://blog.medium.com/what-are-bloom-filters-1ec2a50c68ff)
+- **Write** Operations
+  * Every write activity of nodes is captured by the **commit logs** written in the nodes. Later the data will be captured and stored in the **mem-table**. Whenever the mem-table is full, data will be written into the **SStable data file**. 
+  * All writes are automatically partitioned and replicated throughout the cluster.
+  * Cassandra periodically consolidates the SSTables, discarding unnecessary data.
+- **Read** Operations
+  * During read operations, Cassandra gets values from the **mem-table** and checks the **bloom filter** to find the appropriate **SSTable** that holds the required data.
+
 - [How Cassandra reads and writes data](https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlIntro.html)
-  * more in-depth about the Apache Cassandra Data Model, how Cassandra reads, writes, updates, and deletes data.
+  * more in-depth about the Apache Cassandra Data Model, how Cassandra reads, writes, updates, and deletes data.  
