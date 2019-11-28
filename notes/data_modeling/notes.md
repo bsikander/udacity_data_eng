@@ -154,3 +154,26 @@ All kinds of companies. For example, Uber uses Apache Cassandra for their entire
 - If you want to be able to do **aggregations and analytics**
 - If you have **changing business requirements**: Ad-hoc queries are possible but difficult as the data model was done to fix particular queries
 - If your **queries are not available and you need the flexibility**: You need your queries in advance. If those are not available or you will need to be able to have flexibility on how you query your data you might need to stick with a relational database
+
+## Distributed databases
+
+In a **distributed database**, in order to have **high availability**, you need copies of your data. 
+
+### Eventual Consistency:
+Over time (if no new changes are made) each copy of the data will be the same, but if there are new changes, the data may be different in different locations. The data may be inconsistent for only milliseconds. There are workarounds in place to prevent getting stale data. 
+
+[Reference](https://en.wikipedia.org/wiki/Eventual_consistency). 
+
+**Q: What does the network look like?**
+In Apache Cassandra every node is connected to every node -- it's peer to peer database architecture.
+
+**Q: Is data deployment strategy an important element of data modeling in Apache Cassandra?**
+Deployment strategies are a great topic, but have very little to do with data modeling. Developing deployment strategies focuses on determining how many clusters to create or determining how many nodes are needed. These are topics generally covered under database architecture, database deployment and operations, which we will not cover in this lesson. 
+
+In general, the size of your data and your data model can affect your **deployment strategies**. You need to think about how to create a cluster, how many nodes should be in that cluster, how to do the actual installation. More information about deployment strategies can be found on this [DataStax documentation page](https://docs.datastax.com/en/dse-planning/doc/).
+
+**Cassandra Architecture**
+- [Understanding the architecture](https://docs.datastax.com/en/cassandra/3.0/cassandra/architecture/archTOC.html)
+- [Cassandra Architecture](https://www.tutorialspoint.com/cassandra/cassandra_architecture.htm)
+- [How Cassandra reads and writes data](https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlIntro.html)
+  * more in-depth about the Apache Cassandra Data Model, how Cassandra reads, writes, updates, and deletes data.
