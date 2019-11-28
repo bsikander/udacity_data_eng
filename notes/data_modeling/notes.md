@@ -217,8 +217,8 @@ If I am trying to do analysis, such as determining a trend over time, e.g., how 
 
 ### Data Modeling in Apache Cassandra:
 - **Denormalization** is not just okay -- it's a must
-- Denormalization must be done for **fast reads**
-- Apache Cassandra has been optimized for fast writes
+- Denormalization must be done for fast reads
+- Apache Cassandra has been optimized for **fast writes**
 - ALWAYS think **queries** first
-- One table per query is a great strategy
+- *One table per query* is a great strategy
 - Apache Cassandra **does not allow for JOINs between tables**
