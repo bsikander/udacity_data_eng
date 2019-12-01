@@ -222,3 +222,11 @@ If I am trying to do analysis, such as determining a trend over time, e.g., how 
 - ALWAYS think **queries** first
 - *One table per query* is a great strategy
 - Apache Cassandra **does not allow for JOINs between tables**
+
+#### Primary Key
+- Must be *unique*
+- The `PRIMARY KEY` is made up of either just the `PARTITION KEY` or may also include additional `CLUSTERING COLUMNS`
+- A Simple `PRIMARY KEY` is just one column that is also the `PARTITION KEY`. A **Composite** `PRIMARY KEY` is made up of more than one column and will assist in creating a unique value and in your retrieval queries
+  * [datatax's Simple Primary Key](https://docs.datastax.com/en/cql/3.3/cql/cql_using/useSimplePrimaryKeyConcept.html#useSimplePrimaryKeyConcept)
+- The `PARTITION KEY` will determine the *distribution of data across the system*
+  * The partition key's row value will be *hashed* and stored on the node in the system that holds that range of values.
