@@ -250,6 +250,7 @@ References
 
 In a situation of **COMPOSITE primary key**, the "first part" of the key is called **PARTITION KEY**, and the second part of the key is the **CLUSTERING KEY**.
   - Please note that the both partition and clustering key can be made by more columns.
+  
 Behind these names ...
   - The **Partition Key** is responsible for data distribution across your nodes.
   - The **Clustering Key** is responsible for data sorting within the partition.
