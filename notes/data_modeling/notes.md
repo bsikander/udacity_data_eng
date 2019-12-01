@@ -257,4 +257,11 @@ Behind these names ...
   - The **Primary Ke**y is equivalent to the Partition Key in a single-field-key table (i.e. Simple).
   - The **Composite/Compound Key** is just any multiple-column key.
   
+#### WHERE clause
+- Data modeling in Apache Cassandra is query focused, and that focus needs to be on the WHERE clause
+- Failure to include a WHERE clause will result in an error
 
+AVOID using `ALLOW FILTERING`: Here is a [reference in DataStax](https://www.datastax.com/blog/2014/12/allow-filtering-explained) that explains ALLOW FILTERING and why you should not use it.
+- When your query is rejected by Cassandra because it needs filtering, you should resist the urge to just add ALLOW FILTERING to it. You should think about your data, your model and what you are trying to do. You always have multiple options.
+  * You can change your data model, add an index, use another table or use ALLOW FILTERING.
+  * You have to make the right choice for your specific use case.
