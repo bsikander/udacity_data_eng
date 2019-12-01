@@ -225,8 +225,25 @@ If I am trying to do analysis, such as determining a trend over time, e.g., how 
 
 #### Primary Key
 - Must be *unique*
+  * Hasing of this value results in placement on a particular node in the system
+  * data distributed by this partition key
+  * you want to pick a key that will **evenly distribute** the data as best you can
 - The `PRIMARY KEY` is made up of either just the `PARTITION KEY` or may also include additional `CLUSTERING COLUMNS`
 - A Simple `PRIMARY KEY` is just one column that is also the `PARTITION KEY`. A **Composite** `PRIMARY KEY` is made up of more than one column and will assist in creating a unique value and in your retrieval queries
   * [datatax's Simple Primary Key](https://docs.datastax.com/en/cql/3.3/cql/cql_using/useSimplePrimaryKeyConcept.html#useSimplePrimaryKeyConcept)
 - The `PARTITION KEY` will determine the *distribution of data across the system*
   * The partition key's row value will be *hashed* and stored on the node in the system that holds that range of values.
+
+#### Clustering Columns:
+- The *Primary Key* is made up of either just the *Partition Key* or with the addition of *Clustering Columns*. 
+  * The Clustering Column will determine the **sort order within a partition**. 
+  * The clustering column will sort the data in **ascending order**, e.g., alphabetical order.
+- More than one clustering column can be added (or none!)
+- From there the clustering columns will sort in order of how they were added to the primary key.
+
+Read more here:
+- [datastax's Compound Primary Key](https://docs.datastax.com/en/cql/3.3/cql/cql_using/useCompoundPrimaryKeyConcept.html)
+- [StackOverflow: description of the difference between Partition Keys and Clustering Keys](https://stackoverflow.com/questions/24949676/difference-between-partition-key-composite-key-and-clustering-key-in-cassandra)
+
+**Q: How many clustering columns can we add?**
+You can use as many clustering columns as you would like. You cannot use the clustering columns out of order in the SELECT statement. You may choose to omit using a clustering column in your SELECT statement. That's OK. Just remember to use them in order when you are using the SELECT statement.
