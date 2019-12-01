@@ -34,7 +34,7 @@ create_table_one_query = """
         year int,
         artist_name text,
         album_name text,
-        PRIMARY KEY year
+        PRIMARY KEY (year, artist_name)
     );
 """
 
@@ -43,7 +43,7 @@ create_table_two_query = """
         artist_name text,
         album_name text,
         year int,
-        PRIMARY KEY artist_name
+        PRIMARY KEY (artist_name, year)
     );
 """
 
@@ -52,7 +52,7 @@ create_table_three_query = """
         album_name text,
         artist_name text,
         year int,
-        PRIMARY KEY album_name
+        PRIMARY KEY (album_name, artist_name)
     );
 """
 
