@@ -241,9 +241,19 @@ If I am trying to do analysis, such as determining a trend over time, e.g., how 
 - More than one clustering column can be added (or none!)
 - From there the clustering columns will sort in order of how they were added to the primary key.
 
-Read more here:
+**Q: How many clustering columns can we add?**
+You can use as many clustering columns as you would like. You cannot use the clustering columns out of order in the SELECT statement. You may choose to omit using a clustering column in your SELECT statement. That's OK. Just remember to use them in order when you are using the SELECT statement.
+
+References
 - [datastax's Compound Primary Key](https://docs.datastax.com/en/cql/3.3/cql/cql_using/useCompoundPrimaryKeyConcept.html)
 - [StackOverflow: description of the difference between Partition Keys and Clustering Keys](https://stackoverflow.com/questions/24949676/difference-between-partition-key-composite-key-and-clustering-key-in-cassandra)
 
-**Q: How many clustering columns can we add?**
-You can use as many clustering columns as you would like. You cannot use the clustering columns out of order in the SELECT statement. You may choose to omit using a clustering column in your SELECT statement. That's OK. Just remember to use them in order when you are using the SELECT statement.
+In a situation of **COMPOSITE primary key**, the "first part" of the key is called **PARTITION KEY**, and the second part of the key is the **CLUSTERING KEY**.
+  - Please note that the both partition and clustering key can be made by more columns.
+Behind these names ...
+  - The **Partition Key** is responsible for data distribution across your nodes.
+  - The **Clustering Key** is responsible for data sorting within the partition.
+  - The **Primary Ke**y is equivalent to the Partition Key in a single-field-key table (i.e. Simple).
+  - The **Composite/Compound Key** is just any multiple-column key.
+  
+
