@@ -3,7 +3,8 @@ this repo contains my study notes & projects for udacity's [data engineering nan
 ## data modeling
 * [x] project: data modeling w/ postgres. due **nov 25, 2019**. 
   * submitted & passed 
-* [ ] project: data modeling w/ apache cassandra. due **dec 8, 2019**
+* [x] project: data modeling w/ apache cassandra. due **dec 8, 2019**
+  * submtted
 
 #### quick links
 - [postgres on mac](https://www.codementor.io/engineerapart/getting-started-with-postgresql-on-mac-osx-are8jcopb)
@@ -16,7 +17,6 @@ this repo contains my study notes & projects for udacity's [data engineering nan
 ## cloud data warehouses
 * [ ] project: data warehouses. due **jan 3, 2020**.
 estimated time: 28 days
-actual time:
 
 ## data lakes with spark
 * [ ] project: data lake. due **jan 30, 2020**
