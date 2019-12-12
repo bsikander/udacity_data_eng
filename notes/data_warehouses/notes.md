@@ -23,9 +23,17 @@ Goals:
 - fast analytical query performance
 
 #### Fact tables
-- Record business events, like an order, a phone call, a book review
-- Fact table columns record events in quantifiable **metrics** like quantity of an item, duration of a call, a book rating
+- record business events, like an order, a phone call, a book review
+- fact table columns record events in quantifiable **metrics** like quantity of an item, duration of a call, a book rating
+- the simplest rule is that a fact is usually **numeric** and **additive**
+  * a comment on an article represent an event but we cannot easily make a statics out of its content per se (not a good fact)
+  * invoice number is numeric, but adding it does not make sense (not a good fact)
+  * total amount of an invoice could be added to compute total series (a good fact)
 
 #### Dimensional tables
-- Record the context of the business events, e.g. who, what, where, why...
-- Dimension table columns contain **attributes** like the store at which an item is purchased, or the customer who made the call, etc. 
+- record the context of the business events, e.g. who, what, where, why...
+- dimension table columns contain **attributes** like the store at which an item is purchased, or the customer who made the call, etc. 
+  * **date & time** are always a dimension
+  * **physical location** and their attributes are good candidates for dimensions
+  * **human roles** like customers and staff are always good candidates for dimensions
+  * **goods sold** always good candidates for dimensions
