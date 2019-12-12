@@ -15,3 +15,17 @@ DW goals:
 - performant 
 - handles new questions well
 - secure
+
+## Dimensional Modeling
+
+Goals:
+- easy to understand 
+- fast analytical query performance
+
+#### Fact tables
+- Record business events, like an order, a phone call, a book review
+- Fact table columns record events in quantifiable **metrics** like quantity of an item, duration of a call, a book rating
+
+#### Dimensional tables
+- Record the context of the business events, e.g. who, what, where, why...
+- Dimension table columns contain **attributes** like the store at which an item is purchased, or the customer who made the call, etc. 
