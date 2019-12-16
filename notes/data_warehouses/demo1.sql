@@ -6,7 +6,7 @@
   https://r766469c809452xjupyterlm1wubk29.udacity-student-workspaces.com/files/pagila-star.png
 #}
 
-CREATE TABLE dimDate(
+CREATE TABLE IF NOT EXISTS dimDate(
     date_key int,
     date date,
     year smallint,
@@ -28,7 +28,7 @@ SELECT DISTINCT(TO_CHAR(payment_date :: DATE, 'yyyyMMDD')::integer) AS date_key,
        CASE WHEN EXTRACT(ISODOW FROM payment_date) IN (6, 7) THEN true ELSE false END AS is_weekend
 FROM payment;
 
-CREATE TABLE dimCustomer(
+CREATE TABLE IF NOT EXISTS dimCustomer(
     customer_key int,
     customer_id int,
     first_name text,
@@ -71,7 +71,7 @@ JOIN address a  ON (c.address_id = a.address_id)
 JOIN city ci    ON (a.city_id = ci.city_id)
 JOIN country co ON (ci.country_id = co.country_id);
 
-CREATE TABLE dimMovie(
+CREATE TABLE IF NOT EXISTS dimMovie(
     movie_key int,
     film_id int,
     title text,
@@ -100,3 +100,62 @@ SELECT  DISTINCT(f.film_id) AS movie_key,
 FROM film f
 JOIN language l              ON (f.language_id=l.language_id)
 LEFT JOIN language orig_lang ON (f.original_language_id = orig_lang.language_id);
+
+CREATE TABLE IF NOT EXISTS dimStore(
+    store_key int,
+    store_id int,
+    address text,
+    address2 text,
+    district text,
+    city text,
+    country text,
+    postal_code text,
+    manager_first_name text,
+    manager_last_name text,
+    start_date date,
+    end_date date
+);
+
+INSERT INTO dimStore (store_key, store_id, address, address2, district, city, country, postal_code,
+                         manager_first_name, manager_last_name, start_date, end_date)
+SELECT  DISTINCT(s.store_id) AS store_key,
+        s.store_id AS store_id,
+        a.address AS address,
+        a.address2 AS address2,
+        a.district AS district,
+        ci.city AS city,
+        co.country AS country,
+        a.postal_code AS postal_code,
+        st.first_name AS manager_first_name,
+        st.last_name AS manager_last_name,
+        now()         AS start_date,
+        now()         AS end_date
+FROM store s
+JOIN address a  ON (s.address_id = a.address_id)
+JOIN city ci    ON (a.city_id = ci.city_id)
+JOIN country co ON (ci.country_id = co.country_id)
+JOIN staff st   ON (st.staff_id = s.manager_staff_id);
+
+CREATE TABLE IF NOT EXISTS factSales(
+    sales_key int,
+    date_key int,
+    customer_key int,
+    movie_key int,
+    store_key int,
+    sales_amount float
+);
+
+INSERT INTO factSales (sales_key, date_key, customer_key, movie_key, store_key, sales_amount)
+SELECT  DISTINCT(p.payment_id) AS sales_key,
+        dimDate.date_key AS date_key,
+        dimCustomer.customer_key AS customer_key,
+        dimMovie.movie_key AS movie_key,
+        dimStore.store_key AS store_key,
+        p.amount AS sales_amount
+FROM payment p
+LEFT JOIN rental r     ON (r.rental_id = p.rental_id)
+LEFT JOIN inventory i  ON (i.inventory_id = r.inventory_id)
+LEFT JOIN dimStore     ON (i.store_id = dimStore.store_id)
+LEFT JOIN dimCustomer  ON (r.customer_id = dimCustomer.customer_id)
+LEFT JOIN dimMovie     ON (i.film_id = dimMovie.film_id)
+LEFT JOIN dimDate      ON (p.payment_date = dimDate.date);
