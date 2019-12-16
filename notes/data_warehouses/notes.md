@@ -84,7 +84,20 @@ CREATE TABLE orders (
   * Structuring and loading the data into dimensional data model
 
 ### Independent Data Marts
+- Each department has independent ETL processes & dimensional models.
+- These **separate & smaller** dimensional models are called "**Data Marts**".
+- Different fact tables for the same events; **no conformed dimensions**.
+- **Uncoordinated efforts** can lead to **inconsistent views**.
+- Despite awareness of the emergence of this architecture from departmental autonomy, it is generally discouraged. 
 
 ### Inmon's Corporate Information Factory (CIF)
+Think of an *open kitchen*. 
+- 2 ETL Processes
+  * from source system to 3NF database
+  * from 3NF database to departmental data marts
+- The 3NF DB acts as an **enterprise wide data store**.
+  * single integrated source of truth for data-marts
+  * could be accessed by end-users if needed
+- Data marts dimensionally modelled & unlike Kimball's dimensional models, they're mostly aggregated. 
 
 ### Hybrid Bus & CIF
