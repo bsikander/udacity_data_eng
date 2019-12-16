@@ -49,3 +49,29 @@ CREATE TABLE orders (
     quantity integer
 );
 ```
+
+## DWH Architecture
+
+### Kimball's Bus Architecture
+
+ETL System:
+- transform from source to target
+- conform dimensions
+- no user query support
+
+Presentation Area:
+- **dimensional**
+- atomic & summary data
+- organized by business processes
+- uses **conformed dimensions**
+
+applications: 
+- ad hoc queries
+- standard reports
+- analytic apps 
+
+### Independent Data Marts
+
+### Inmon's Corporate Information Factory (CIF)
+
+### Hybrid Bus & CIF
