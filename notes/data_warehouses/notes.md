@@ -30,15 +30,6 @@ Goals:
   * invoice number is numeric, but adding it does not make sense (not a good fact)
   * total amount of an invoice could be added to compute total series (a good fact)
 
-*Note on REFERENCES constraints*:
-When building a fact table, you use the `REFERENCES` constraint to identify which table and column a foreign key is connected to. This ensures that the fact table does not refer to items that do not appear in the respective dimension tables. You can read more [here](https://www.postgresql.org/docs/9.2/ddl-constraints.html). Here's an example of the syntax on a different schema:
-```
-CREATE TABLE orders (
-    order_id integer PRIMARY KEY,
-    product_no integer REFERENCES products (product_no),
-    quantity integer
-);
-```
 
 #### Dimensional tables
 - record the context of the business events, e.g. who, what, where, why...
@@ -47,3 +38,14 @@ CREATE TABLE orders (
   * **physical location** and their attributes are good candidates for dimensions
   * **human roles** like customers and staff are always good candidates for dimensions
   * **goods sold** always good candidates for dimensions
+
+*Note on REFERENCES constraints*:
+
+When building a fact table, you use the `REFERENCES` constraint to identify which table and column a foreign key is connected to. This ensures that the fact table does not refer to items that do not appear in the respective dimension tables. You can read more [here](https://www.postgresql.org/docs/9.2/ddl-constraints.html). Here's an example of the syntax on a different schema:
+```
+CREATE TABLE orders (
+    order_id integer PRIMARY KEY,
+    product_no integer REFERENCES products (product_no),
+    quantity integer
+);
+```
