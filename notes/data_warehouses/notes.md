@@ -54,21 +54,34 @@ CREATE TABLE orders (
 
 ### Kimball's Bus Architecture
 
-ETL System:
+**ETL System** (kitchen)
 - transform from source to target
 - conform dimensions
 - no user query support
 
-Presentation Area:
+**Presentation Area** (dining room)
 - **dimensional**
-- atomic & summary data
+- **atomic** & summary data
+  * as opposed to keeping the data at the aggregated level
 - organized by business processes
 - uses **conformed dimensions**
+  * e.g. if i use date dimensions, i try to use it across all departments; try to generalize and build all of my dimensions in a way that is usable by the whole organization. 
 
-applications: 
+**Applications** (dining room) 
 - ad hoc queries
 - standard reports
 - analytic apps 
+
+**ETL: A closer look**
+- Extracting:
+  * Get the data from its source
+  * Possibly delete old state
+- Transforming:
+  * **Integrates** many sources together
+  * Possibly **cleaning**: inconsistencies, duplication, missing values, etc.
+  * Possibly producing **diagnostic metadata**
+- Loading:
+  * Structuring and loading the data into dimensional data model
 
 ### Independent Data Marts
 
