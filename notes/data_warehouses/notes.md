@@ -100,4 +100,16 @@ Think of an *open kitchen*.
   * could be accessed by end-users if needed
 - Data marts dimensionally modelled & unlike Kimball's dimensional models, they're mostly aggregated. 
 
-### Hybrid Bus & CIF
+### Hybrid Kimball Bus & CIF
+The Hybrid Kimball Bus and Inmon CIF model stays true to the Enterprise Data Warehouse with data maintained in 3NF even though normalized data tables may not be optimal for BI reports.
+
+## OLAP Cubes
+An OLAP cube is an aggregation of a fact metric on a number of dimensions, e.g. Movie, Branch, Month
+- easy to communicate to business users
+- common OLAP **operations** include: **Rollup, drill-down, slice & dice**. 
+
+### Roll-up & Drill-down
+- **Roll-up**: Sum up the sales of each city by country, e.g. US, France (less columns in branch dimension)
+- **Drill-down**: Decompose the sales of each city into smaller districts (more columns in branch dimension)
+- The **OLAP cubes should store the finest grain of data (atomic data)**, in case we need to drill-down to the lowest level, e.g. country -> city -> district -> street, etc. 
+
