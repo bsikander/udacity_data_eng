@@ -1,8 +1,8 @@
 this repo contains my study notes & projects for udacity's [data engineering nanodegree program](https://www.udacity.com/course/data-engineer-nanodegree--nd027)
 
 ## data modeling
-* [x] project: data modeling w/ postgres. due **nov 25, 2019**. 
-  * submitted & passed 
+* [x] project: data modeling w/ postgres. due **nov 25, 2019**.
+  * submitted & passed
 * [x] project: data modeling w/ apache cassandra. due **dec 8, 2019**
   * submitted & passed
 

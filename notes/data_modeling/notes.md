@@ -157,13 +157,13 @@ All kinds of companies. For example, Uber uses Apache Cassandra for their entire
 
 ## Distributed databases
 
-In a **distributed database**, in order to have **high availability**, you need copies of your data. 
+In a **distributed database**, in order to have **high availability**, you need copies of your data.
 
 ### Eventual Consistency:
 
-Over time (if no new changes are made) each copy of the data will be the same, but if there are new changes, the data may be different in different locations. The data may be inconsistent for only milliseconds. There are workarounds in place to prevent getting stale data. 
+Over time (if no new changes are made) each copy of the data will be the same, but if there are new changes, the data may be different in different locations. The data may be inconsistent for only milliseconds. There are workarounds in place to prevent getting stale data.
 
-[Reference](https://en.wikipedia.org/wiki/Eventual_consistency). 
+[Reference](https://en.wikipedia.org/wiki/Eventual_consistency).
 
 **Q: What does the network look like?**
 
@@ -172,11 +172,11 @@ In Apache Cassandra every node is connected to every node -- it's peer to peer d
 **Cassandra Architecture**
 - [Understanding the architecture](https://docs.datastax.com/en/cassandra/3.0/cassandra/architecture/archTOC.html)
 - [Cassandra Architecture](https://www.tutorialspoint.com/cassandra/cassandra_architecture.htm)
-  
+
 - *Data Replication* in Cassandra
   * One or more of the nodes in a cluster act as replicas for a given piece of data. If it is detected that some of the nodes responded with an out-of-date value, Cassandra will return the most recent value to the client. After returning the most recent value, Cassandra performs a **read repair** in the background to update the stale values.
   * Cassandra uses the **Gossip Protocol** in the background to allow the nodes to communicate with each other and detect any faulty nodes in the cluster.
-  
+
 - Components of Cassandra
   * **Node** − It is the place where data is stored.
   * **Data center** − It is a collection of related nodes.
@@ -187,15 +187,15 @@ In Apache Cassandra every node is connected to every node -- it's peer to peer d
   * **Bloom filter** − These are nothing but quick, nondeterministic, algorithms for testing whether an element is a member of a set. It is a special kind of *cache*. Bloom filters are accessed after every query.
     * [What are bloom filters?](https://blog.medium.com/what-are-bloom-filters-1ec2a50c68ff)
 - **Write** Operations
-  * Every write activity of nodes is captured by the **commit logs** written in the nodes. Later the data will be captured and stored in the **mem-table**. Whenever the mem-table is full, data will be written into the **SStable data file**. 
+  * Every write activity of nodes is captured by the **commit logs** written in the nodes. Later the data will be captured and stored in the **mem-table**. Whenever the mem-table is full, data will be written into the **SStable data file**.
   * All writes are automatically partitioned and replicated throughout the cluster.
   * Cassandra periodically consolidates the SSTables, discarding unnecessary data.
 - **Read** Operations
   * During read operations, Cassandra gets values from the **mem-table** and checks the **bloom filter** to find the appropriate **SSTable** that holds the required data.
 
 - [How Cassandra reads and writes data](https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlIntro.html)
-  * more in-depth about the Apache Cassandra Data Model, how Cassandra reads, writes, updates, and deletes data.  
-  
+  * more in-depth about the Apache Cassandra Data Model, how Cassandra reads, writes, updates, and deletes data.
+
 ## CAP Theorem
 
 - **Consistency**: Every read from the database gets the latest (and correct) piece of data or an error
@@ -235,8 +235,8 @@ If I am trying to do analysis, such as determining a trend over time, e.g., how 
   * The partition key's row value will be *hashed* and stored on the node in the system that holds that range of values.
 
 #### Clustering Columns:
-- The *Primary Key* is made up of either just the *Partition Key* or with the addition of *Clustering Columns*. 
-  * The Clustering Column will determine the **sort order within a partition**. 
+- The *Primary Key* is made up of either just the *Partition Key* or with the addition of *Clustering Columns*.
+  * The Clustering Column will determine the **sort order within a partition**.
   * The clustering column will sort the data in **ascending order**, e.g., alphabetical order.
 - More than one clustering column can be added (or none!)
 - From there the clustering columns will sort in order of how they were added to the primary key.
@@ -250,13 +250,13 @@ References
 
 In a situation of **COMPOSITE primary key**, the "first part" of the key is called **PARTITION KEY**, and the second part of the key is the **CLUSTERING KEY**.
   - Please note that the both partition and clustering key can be made by more columns.
-  
+
 Behind these names ...
   - The **Partition Key** is responsible for data distribution across your nodes.
   - The **Clustering Key** is responsible for data sorting within the partition.
   - The **Primary Ke**y is equivalent to the Partition Key in a single-field-key table (i.e. Simple).
   - The **Composite/Compound Key** is just any multiple-column key.
-  
+
 #### WHERE clause
 - Data modeling in Apache Cassandra is query focused, and that focus needs to be on the WHERE clause.
   * The *Partition Key* must be included in your query and any *Clustering Columns* can be used in the order they appear in your *Primary Key*.
@@ -267,7 +267,7 @@ Behind these names ...
     * You have to make the right choice for your specific use case.
 
 **Q: Why do we need to use a WHERE statement since we are not concerned about analytics? Is it only for debugging purposes?**
-The WHERE statement is allowing us to do the **fast reads**. 
+The WHERE statement is allowing us to do the **fast reads**.
 - With Apache Cassandra, we are talking about big data -- think terabytes of data -- so we are making it fast for read purposes.
-- Data is spread across all the nodes. By using the WHERE statement, we know which node to go to, from which node to get that data and serve it back. 
+- Data is spread across all the nodes. By using the WHERE statement, we know which node to go to, from which node to get that data and serve it back.
   * For example, imagine we have 10 years of data on 10 nodes or servers. So 1 year's data is on a separate node. By using the WHERE year = 1 statement we know which node to visit fast to pull the data from.
