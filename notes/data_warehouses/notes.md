@@ -115,3 +115,13 @@ Common OLAP **operations** include: **Rollup, drill-down, slice & dice**.
   * e.g. `month = 'March'`
 - **Dice**: Same dimensions but computing a sub-cube by restricting some of the values of the dimensions.
   * e.g. `month in ('March, 'Feb'] and movie in ['Avatar', 'Batman'] and branch = 'NY'`
+
+OLAP cube **query optimatization**:
+- Business users will typically want to slice, dice, roll up , and drill down all the time
+- Each sub combination will potentially go through all the facts table (suboptimal)
+- The **`GROUP BY CUBE (movie, branch, month)`** will make **one pass through** the facts table and will aggregate all possible combinations of groupings, of length 0, 1, 2, 3; e.g. 
+  * total revenue
+  * revenue by movie; revenue by month; revenue by branch
+  * revenue by movie, branch; revenue by branch, month; revenue by movie, month
+  * revenue by movie, branch, revenue.
+- Saving/materializing the output of the CUBE operation and using it is usually enough to answer all forthcoming aggregations from business uesrs w/o having to process the whole facts table again.
