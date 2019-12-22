@@ -106,10 +106,12 @@ The Hybrid Kimball Bus and Inmon CIF model stays true to the Enterprise Data War
 ## OLAP Cubes
 An OLAP cube is an aggregation of a fact metric on a number of dimensions, e.g. Movie, Branch, Month
 - easy to communicate to business users
-- common OLAP **operations** include: **Rollup, drill-down, slice & dice**. 
 
-### Roll-up & Drill-down
+Common OLAP **operations** include: **Rollup, drill-down, slice & dice**. 
 - **Roll-up**: Sum up the sales of each city by country, e.g. US, France (less columns in branch dimension)
 - **Drill-down**: Decompose the sales of each city into smaller districts (more columns in branch dimension)
-- The **OLAP cubes should store the finest grain of data (atomic data)**, in case we need to drill-down to the lowest level, e.g. country -> city -> district -> street, etc. 
-
+  * The **OLAP cubes should store the finest grain of data (atomic data)**, in case we need to drill-down to the lowest level, e.g. country -> city -> district -> street, etc. 
+- **Slice**: Reduce N dimensions to N-1 dimensions by restricting one dimension to a single value.
+  * e.g. `month = 'March'`
+- **Dice**: Same dimensions but computing a sub-cube by restricting some of the values of the dimensions.
+  * e.g. `month in ('March, 'Feb'] and movie in ['Avatar', 'Batman'] and branch = 'NY'`
