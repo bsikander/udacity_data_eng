@@ -125,3 +125,33 @@ OLAP cube **query optimatization**:
   * revenue by movie, branch; revenue by branch, month; revenue by movie, month
   * revenue by movie, branch, revenue.
 - Saving/materializing the output of the CUBE operation and using it is usually enough to answer all forthcoming aggregations from business uesrs w/o having to process the whole facts table again.
+
+**grouping sets**
+
+The [`GROUPING SETS`](http://www.sqlservertutorial.net/sql-server-basics/sql-server-grouping-sets/) defines multiple grouping sets in the same query. 
+```
+SELECT
+    column1,
+    column2,
+    aggregate_function (column3)
+FROM
+    table_name
+GROUP BY
+    GROUPING SETS (
+        (column1, column2),
+        (column1),
+        (column2),
+        ()
+);
+```
+As you can see, the query produces the same result as the one that uses the `UNION ALL` operator. However, this query is much more readable and of course more efficient.
+
+e.g.
+```
+SELECT d.month AS month, s.country AS country, sum(fs.sales_amount) AS revenue
+FROM factsales AS fs
+JOIN dimstore AS s on s.store_key = fs.store_key
+JOIN dimdate AS d on d.date_key = fs.date_key
+GROUP BY grouping sets ((), month, country, (month, country))
+ORDER BY month, country, revenue desc
+```
