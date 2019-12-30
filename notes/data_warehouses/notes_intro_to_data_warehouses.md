@@ -65,12 +65,12 @@ CREATE TABLE orders (
   * as opposed to keeping the data at the aggregated level
 - organized by business processes
 - uses **conformed dimensions**
-  * e.g. if i use date dimensions, i try to use it across all departments; try to generalize and build all of my dimensions in a way that is usable by the whole organization. 
+  * e.g. if i use date dimensions, i try to use it across all departments; try to generalize and build all of my dimensions in a way that is usable by the whole organization.
 
-**Applications** (dining room) 
+**Applications** (dining room)
 - ad hoc queries
 - standard reports
-- analytic apps 
+- analytic apps
 
 **ETL: A closer look**
 - Extracting:
@@ -88,17 +88,17 @@ CREATE TABLE orders (
 - These **separate & smaller** dimensional models are called "**Data Marts**".
 - Different fact tables for the same events; **no conformed dimensions**.
 - **Uncoordinated efforts** can lead to **inconsistent views**.
-- Despite awareness of the emergence of this architecture from departmental autonomy, it is generally discouraged. 
+- Despite awareness of the emergence of this architecture from departmental autonomy, it is generally discouraged.
 
 ### Inmon's Corporate Information Factory (CIF)
-Think of an *open kitchen*. 
+Think of an *open kitchen*.
 - 2 ETL Processes
   * from source system to 3NF database
   * from 3NF database to departmental data marts
 - The 3NF DB acts as an **enterprise wide data store**.
   * single integrated source of truth for data-marts
   * could be accessed by end-users if needed
-- Data marts dimensionally modelled & unlike Kimball's dimensional models, they're mostly aggregated. 
+- Data marts dimensionally modelled & unlike Kimball's dimensional models, they're mostly aggregated.
 
 ### Hybrid Kimball Bus & CIF
 The Hybrid Kimball Bus and Inmon CIF model stays true to the Enterprise Data Warehouse with data maintained in 3NF even though normalized data tables may not be optimal for BI reports.
@@ -107,10 +107,10 @@ The Hybrid Kimball Bus and Inmon CIF model stays true to the Enterprise Data War
 An OLAP cube is an aggregation of a fact metric on a number of dimensions, e.g. Movie, Branch, Month
 - easy to communicate to business users
 
-Common OLAP **operations** include: **Rollup, drill-down, slice & dice**. 
+Common OLAP **operations** include: **Rollup, drill-down, slice & dice**.
 - **Roll-up**: Sum up the sales of each city by country, e.g. US, France (less columns in branch dimension)
 - **Drill-down**: Decompose the sales of each city into smaller districts (more columns in branch dimension)
-  * The **OLAP cubes should store the finest grain of data (atomic data)**, in case we need to drill-down to the lowest level, e.g. country -> city -> district -> street, etc. 
+  * The **OLAP cubes should store the finest grain of data (atomic data)**, in case we need to drill-down to the lowest level, e.g. country -> city -> district -> street, etc.
 - **Slice**: Reduce N dimensions to N-1 dimensions by restricting one dimension to a single value.
   * e.g. `month = 'March'`
 - **Dice**: Same dimensions but computing a sub-cube by restricting some of the values of the dimensions.
@@ -119,7 +119,7 @@ Common OLAP **operations** include: **Rollup, drill-down, slice & dice**.
 OLAP cube **query optimatization**:
 - Business users will typically want to slice, dice, roll up , and drill down all the time
 - Each sub combination will potentially go through all the facts table (suboptimal)
-- The **`GROUP BY CUBE (movie, branch, month)`** will make **one pass through** the facts table and will aggregate all possible combinations of groupings, of length 0, 1, 2, 3; e.g. 
+- The **`GROUP BY CUBE (movie, branch, month)`** will make **one pass through** the facts table and will aggregate all possible combinations of groupings, of length 0, 1, 2, 3; e.g.
   * total revenue
   * revenue by movie; revenue by month; revenue by branch
   * revenue by movie, branch; revenue by branch, month; revenue by movie, month
@@ -128,7 +128,7 @@ OLAP cube **query optimatization**:
 
 #### GROUPING SETS
 
-The [`GROUPING SETS`](http://www.sqlservertutorial.net/sql-server-basics/sql-server-grouping-sets/) defines multiple grouping sets in the same query. 
+The [`GROUPING SETS`](http://www.sqlservertutorial.net/sql-server-basics/sql-server-grouping-sets/) defines multiple grouping sets in the same query.
 ```
 SELECT
     column1,
@@ -157,7 +157,7 @@ ORDER BY month, country, revenue desc
 ```
 
 #### CUBE
-The `CUBE` is a subclause of the `GROUP BY` clause that allows you to [generate multiple grouping sets](http://www.sqlservertutorial.net/sql-server-basics/sql-server-cube/). 
+The `CUBE` is a subclause of the `GROUP BY` clause that allows you to [generate multiple grouping sets](http://www.sqlservertutorial.net/sql-server-basics/sql-server-cube/).
 ```
 SELECT
     d1,
@@ -181,20 +181,20 @@ FROM
     table_name
 GROUP BY
     GROUPING SETS (
-        (d1,d2,d3), 
+        (d1,d2,d3),
         (d1,d2),
         (d1,d3),
         (d2,d3),
         (d1),
         (d2),
-        (d3), 
+        (d3),
         ()
      );
 ```
 
 If you have **N** dimension columns specified in the `CUBE`, you will have **2N** grouping sets.
 
-Also, `None` here is expressive; so one usually cleans and drops any `None`s before doing a cube. 
+Also, `None` here is expressive; so one usually cleans and drops any `None`s before doing a cube.
 
 ## Delivering the analytics to users
 Data is available:
@@ -228,13 +228,13 @@ CREATE SERVER cstore_server FOREIGN DATA WRAPPER cstore_fdw;
 -- create foreign table
 DROP FOREIGN TABLE IF EXISTS customer_reviews_col;
 
--- CREATE FOREIGN TABLE 
+-- CREATE FOREIGN TABLE
 
 -- leave code below as is
 SERVER cstore_server
 OPTIONS(compression 'pglz');
 ```
-  
+
 **References**:
 - [The Data Warehouse Toolkit: The Complete Guide to Dimensional Modeling (Kimball)](https://www.amazon.com/Data-Warehouse-Toolkit-Complete-Dimensional/dp/0471200247)
 - [Building the Data Warehouse (Inmon)](https://www.amazon.com/Building-Data-Warehouse-W-Inmon/dp/0764599445)
