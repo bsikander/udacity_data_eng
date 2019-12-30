@@ -9,4 +9,11 @@
 - Rapidly provision resources
 - Provide efficient global access
 
-# 
+# DWH on AWS
+
+Choices for implementing a data warehouse:
+- Taking the **on-premise** road, think about:
+  * Heterogeneity, scalability, elasticity of the tools, technologies, and processes
+  * Need for diverse IT staff skills & multiple locations
+  * Cost of ownership
+- 
