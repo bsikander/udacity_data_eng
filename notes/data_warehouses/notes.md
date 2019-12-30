@@ -1,4 +1,4 @@
-# Data Warehouse
+# Intro to Data Warehouse
 
 Definitions:
 - A data warehouse is a **copy** of transaction data specifically structured for query and analysis.
