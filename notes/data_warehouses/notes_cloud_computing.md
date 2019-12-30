@@ -69,9 +69,8 @@ Redshift **Cluster**:
   * *scale out*: get more nodes
   * **node slices**:
     - each compute node is logically divided into a number of slices
+    - for simplicity, think of each slice as a CPU, and each CPU has a bunch of disks **dedicated to its work**
     - a cluster with *n* slices, can process *n* partitions of a table simultaneously
-  
-
-
-
+ 
+ ### SQL to SQL ETL
 
