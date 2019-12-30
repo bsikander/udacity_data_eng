@@ -207,10 +207,35 @@ Data is available:
 #### OLAP Cube technology
 
 Approach 1: **Pre-aggregate** the OLAP cubes and saves them on a special purpose non-relational database (**MOLAP**)
+- go buy an OLAP server: has an internal structure optimized for serving OLAP cubes; this is more traditional.
 
 Approach 2: Compute the OLAP cubes **on the fly** from the existing relational database where the dimensional model resides (**ROLAP**)
+
+**Column format in ROLAP**:
+- Use a postgresql with a **columnar table** extension
+- Load a dataset in a normal table
+- Load the same dataset in a columnar table
+- Compare the performance of the fact-aggregating query performance in both tables.
+
+e.g. Columnar store for analytics with Postgres, developed by Citus Data - [cstore_fdw](https://github.com/citusdata/cstore_fdw)
+```
+-- load extension first time after install
+CREATE EXTENSION cstore_fdw;
+
+-- create server object
+CREATE SERVER cstore_server FOREIGN DATA WRAPPER cstore_fdw;
+
+-- create foreign table
+DROP FOREIGN TABLE IF EXISTS customer_reviews_col;
+
+-- CREATE FOREIGN TABLE 
+
+-- leave code below as is
+SERVER cstore_server
+OPTIONS(compression 'pglz');
+```
   
-References:
+**References**:
 - [The Data Warehouse Toolkit: The Complete Guide to Dimensional Modeling (Kimball)](https://www.amazon.com/Data-Warehouse-Toolkit-Complete-Dimensional/dp/0471200247)
 - [Building the Data Warehouse (Inmon)](https://www.amazon.com/Building-Data-Warehouse-W-Inmon/dp/0764599445)
 - [Building a Data Warehouse: With Examples in SQL Server (Rainardi)](https://www.amazon.com/Building-Data-Warehouse-Examples-Experts/dp/1590599314)
