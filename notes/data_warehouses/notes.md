@@ -126,7 +126,7 @@ OLAP cube **query optimatization**:
   * revenue by movie, branch, revenue.
 - Saving/materializing the output of the CUBE operation and using it is usually enough to answer all forthcoming aggregations from business uesrs w/o having to process the whole facts table again.
 
-**grouping sets**
+#### GROUPING SETS
 
 The [`GROUPING SETS`](http://www.sqlservertutorial.net/sql-server-basics/sql-server-grouping-sets/) defines multiple grouping sets in the same query. 
 ```
@@ -155,3 +155,41 @@ JOIN dimdate AS d on d.date_key = fs.date_key
 GROUP BY grouping sets ((), month, country, (month, country))
 ORDER BY month, country, revenue desc
 ```
+
+#### CUBE
+The `CUBE` is a subclause of the `GROUP BY` clause that allows you to [generate multiple grouping sets](http://www.sqlservertutorial.net/sql-server-basics/sql-server-cube/). 
+```
+SELECT
+    d1,
+    d2,
+    d3,
+    aggregate_function (c4)
+FROM
+    table_name
+GROUP BY
+    CUBE (d1, d2, d3);
+```
+In this syntax, the `CUBE` generates all possible grouping sets based on the dimension columns d1, d2, and d3 that you specify in the `CUBE` clause.
+The above query returns the same result set as the following query, which uses the `GROUPING SETS`:
+```
+SELECT
+    d1,
+    d2,
+    d3,
+    aggregate_function (c4)
+FROM
+    table_name
+GROUP BY
+    GROUPING SETS (
+        (d1,d2,d3), 
+        (d1,d2),
+        (d1,d3),
+        (d2,d3),
+        (d1),
+        (d2),
+        (d3), 
+        ()
+     );
+```
+
+If you have **N** dimension columns specified in the `CUBE`, you will have **2N** grouping sets.
