@@ -195,3 +195,22 @@ GROUP BY
 If you have **N** dimension columns specified in the `CUBE`, you will have **2N** grouping sets.
 
 Also, `None` here is expressive; so one usually cleans and drops any `None`s before doing a cube. 
+
+## Delivering the analytics to users
+Data is available:
+- in an understandable & performant dimensional model
+- with *conformed dimensions* or separate *data marts*
+- for users to report and visualize
+  * by interacting directly with the model
+  * or in most cases, through a BI application
+
+#### OLAP Cube technology
+
+Approach 1: **Pre-aggregate** the OLAP cubes and saves them on a special purpose non-relational database (**MOLAP**)
+
+Approach 2: Compute the OLAP cubes **on the fly** from the existing relational database where the dimensional model resides (**ROLAP**)
+  
+References:
+- [The Data Warehouse Toolkit: The Complete Guide to Dimensional Modeling (Kimball)](https://www.amazon.com/Data-Warehouse-Toolkit-Complete-Dimensional/dp/0471200247)
+- [Building the Data Warehouse (Inmon)](https://www.amazon.com/Building-Data-Warehouse-W-Inmon/dp/0764599445)
+- [Building a Data Warehouse: With Examples in SQL Server (Rainardi)](https://www.amazon.com/Building-Data-Warehouse-Examples-Experts/dp/1590599314)
