@@ -193,3 +193,5 @@ GROUP BY
 ```
 
 If you have **N** dimension columns specified in the `CUBE`, you will have **2N** grouping sets.
+
+Also, `None` here is expressive; so one usually cleans and drops any `None`s before doing a cube. 
