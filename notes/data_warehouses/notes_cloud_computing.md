@@ -85,16 +85,30 @@ A more general solution?
 - stores the results in CSV files - needs large storage space.
 - `INSERT` or `COPY` the results in the destination db server. 
 
-Ingesting at scale: use `COPY`
+Ingesting at scale: 
 - to transfer data from an S3 staging area to redshift use the `COPY` command
   * inserting data row using `INSERT` will be very slow
-- if the file is large:
-  * it's better to break it into **multiple files**
-    - each redshift slice will act as a separate worker and will use ingest the split of a file in parallel, so the process will complete much faster
-    - ingest **in parallel**:
-      * either using a **common prefix**
-      * or a **manifest file**
+- if the file is large, it's better to break it into **multiple files**
+  - each redshift slice will act as a separate worker and will use ingest the split of a file in parallel, so the process will complete much faster
+  - ingest **in parallel**:
+    * either using a **common prefix**
+    * or a **manifest file**
 - better to ingest from **the same AWS region**
 - better to **compress** the csv files
-- one can also speficy the delimiter to be used
+- one can also speficy the delimiter to be used, if not '`,`'.
 
+
+using a **common prefix** `part`, e.g.
+```sql
+COPY sporting_event_ticket FROM 's3://udacity-labs/tickets/split/part'
+CREDENTIALS 'aws_iam_role=arn:aws:iam:464956546:role/dwhRole'
+gzip DELIMITER ';' REGION 'us-west-2'
+```
+
+using **manifest file**
+- if the files have a common suffix and not a common prefix, we actually need to create a manifest specifying the list of files, e.g.
+```sql
+COPY customer FROM 's3://mybucket/cust.manifest'
+IAM_ROLE 'arn:aws:iam:0123456789012:role/myRedshiftRole'
+manifest;
+```
