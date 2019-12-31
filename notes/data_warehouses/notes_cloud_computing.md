@@ -72,5 +72,15 @@ Redshift **Cluster**:
     - for simplicity, think of each slice as a CPU, and each CPU has a bunch of disks **dedicated to its work**
     - a cluster with *n* slices, can process *n* partitions of a table simultaneously
  
- ### SQL to SQL ETL
+### SQL to SQL ETL
 
+To copy the results of a query to another table *in the same database*, we can easily use `SELECT INTO`
+
+To copy the results of a query to another table *on a totally different database server*? 
+- If both servers are running the same RDBMS, it might be possible to do `SELECT INTO` but harder between two completely different RDBMSs.
+- And even if we can, we probably need to do some cleaning, tranformation, governace, etc...
+
+A more general solution? 
+- an **ETL server** can talk to the source server and runs a `SELECT` query on the source db server
+- stores the results in CSV files - needs large storage space.
+- `INSERT` or `COPY` the results in the destination db server. 
