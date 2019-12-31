@@ -84,3 +84,17 @@ A more general solution?
 - an **ETL server** can talk to the source server and runs a `SELECT` query on the source db server
 - stores the results in CSV files - needs large storage space.
 - `INSERT` or `COPY` the results in the destination db server. 
+
+Ingesting at scale: use `COPY`
+- to transfer data from an S3 staging area to redshift use the `COPY` command
+  * inserting data row using `INSERT` will be very slow
+- if the file is large:
+  * it's better to break it into **multiple files**
+    - each redshift slice will act as a separate worker and will use ingest the split of a file in parallel, so the process will complete much faster
+    - ingest **in parallel**:
+      * either using a **common prefix**
+      * or a **manifest file**
+- better to ingest from **the same AWS region**
+- better to **compress** the csv files
+- one can also speficy the delimiter to be used
+
