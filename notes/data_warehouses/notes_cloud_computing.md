@@ -136,10 +136,6 @@ It's also possible to **ingest directly** using *ssh* from EC2 machines
 ### Building A Redshift Cluster
 [Launching a Redshift Cluster in the AWS console](https://classroom.udacity.com/nanodegrees/nd027/parts/69a25b76-3ebd-4b72-b7cb-03d82da12844/modules/445568fc-578d-4d3e-ab9c-2d186728ab22/lessons/21d59f40-6033-40b5-81a2-4a3211d9f46e/concepts/fad03fb3-ce48-4a69-9887-4baf8751cae3)
 
-Follow the instructions below to
-- Create a Redshift cluster
-- Use the query editor to create a table and insert data
-- Delete the cluster
 Note: The steps below were introduced in lesson 2. 
 - [Create an IAM role](https://classroom.udacity.com/nanodegrees/nd027/parts/69a25b76-3ebd-4b72-b7cb-03d82da12844/modules/445568fc-578d-4d3e-ab9c-2d186728ab22/lessons/53e6c5d3-c9bb-4938-9133-bf8c6bfad3da/concepts/ef0f5bdf-d5e2-461c-b375-fc0dd89ccb79)
 - [Create a Security Group](https://classroom.udacity.com/nanodegrees/nd027/parts/69a25b76-3ebd-4b72-b7cb-03d82da12844/modules/445568fc-578d-4d3e-ab9c-2d186728ab22/lessons/53e6c5d3-c9bb-4938-9133-bf8c6bfad3da/concepts/2609fcec-122e-4780-bfff-510713320800)
@@ -152,3 +148,35 @@ Note: The steps below were introduced in lesson 2.
 **Key recommendations for using your AWS credits wisely**:
 - Delete your Amazon Redshift cluster each time you're finished working.
 - Use a smaller subset of your data while you code and debug on AWS, and only execute with the full dataset on AWS as a final test of your code.
+
+**security settings**:
+- Redshift has to act as a user who has Read access to S3 
+- Jupyter has to be able to connect
+  * Redshift is launched within a VPC
+  * this means we need to change TCP ports open in the security group, so we can access this DWH from the outside
+
+### Infrastructure as Code on AWS
+An advantage of being in the cloud is the ability to **create infrastructure, i.e. machines, users, roles, folders and processes using code**. 
+- IaC lets you automate, maintain, deploy, replicate and share complex infrastructures as easily as you maintain code (undreamt-of in an on-premise deployment) e.g. "creating a machine is as easy as opening a file."
+  * **sharing**: one can share all the steps with others easily
+  * **reproducibility**: one can be sure that no steps are forgotten. 
+  * **multiple deployments**: one can create a test environment identical to the production environment
+  * **maintainability**: if a change is needed, one can keep track of the changes by comparing the code 
+- IaC is border-line dataEng/devOps.
+
+We have a number of options to achieve IaC on AWS:
+- `aws-cli` scripts
+  * similar to bash scripts
+  * simple & convenient
+- AWS sdk
+  * available in a lot of languages, e.g. Java, Ruby, Python, Go, Node, etc.
+  * more powerful, could be integrated with apps
+- **Amazon Cloud Formation**
+  * json description of all resources, permissions, constraints
+  * atomic - "stack" either all succeed or all fail
+
+Our IaC choice:
+- will use the python AWS SDK aka `boto3`
+- will create one IAM user called `dwhadmin`
+  * will give admin privileges 
+  * will use its access token and secret to build our cluster and configure it, that should be our last "click-and-fill" process
