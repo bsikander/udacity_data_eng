@@ -219,4 +219,31 @@ Rows **having similar values** are placed on the same slice.
 - minimizes the query time since each node already has contiguous ranges of rows based on the sorting key
 - **useful for columns that are used frequently in sorting** e.g. `ORDER BY`; like the date dimension and its corresponding foreign key in the fact table. 
 
+#### References
+[AWS: Choose the Best Sort Key](https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-sort-key.html)
+- **If recent data is queried most frequently**, specify the **timestamp** column as the leading column for the sort key.
+  * Queries are more efficient because they can skip entire blocks that fall outside the time range.
+- **If you do frequent range filtering or equality filtering on one column**, specify that column as the sort key.
+  * Amazon Redshift can skip reading entire blocks of data for that column.
+  * It can do so because it tracks the minimum and maximum column values stored on each block and can skip blocks that don't apply to the predicate range.
+- **If you frequently join a table**, specify the **join column as both the sort key and the distribution key**.
+  * Doing this enables the query optimizer to choose a **sort merge join** instead of a slower **hash join**.
+  * Because the data is already sorted on the join key, the query optimizer can bypass the sort phase of the sort merge join.
 
+[AWS: Choose the Best Distribution Style](https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-best-dist-key.html)
+The goal in selecting a table distribution style is to minimize the impact of the redistribution step by locating the data where it needs to be before the query is executed.
+- **Distribute the fact table and one dimension table on their common columns**.
+  * Your fact table can have only one distribution key.
+  * Any tables that join on another key aren't collocated with the fact table.
+  * Choose one dimension to collocate based on how frequently it is joined and the size of the joining rows.
+  * Designate both the dimension table's primary key and the fact table's corresponding foreign key as the `DISTKEY`.
+- **Choose the largest dimension based on the size of the filtered dataset**.
+  * Only the rows that are used in the join need to be distributed, so consider the size of the dataset *after filtering*, not the size of the table.
+- **Choose a column with high cardinality in the filtered result set**.
+  * If you distribute a sales table on a date column, for example, you should probably get fairly even data distribution, unless most of your sales are seasonal.
+  * However, if you commonly use a range-restricted predicate to filter for a narrow date period, most of the filtered rows occur on a limited set of slices and the query workload is skewed.
+- **Change some dimension tables to use ALL distribution**.
+  * If a dimension table cannot be collocated with the fact table or other important joining tables, you can improve query performance significantly by distributing the entire table to all of the nodes.
+  * Using `AL`L distribution multiplies storage space requirements and increases load times and maintenance operations, so you should weigh all factors before choosing `ALL` distribution.
+
+To let Amazon Redshift choose the appropriate distribution style, don't specify `DISTSTYLE`.
