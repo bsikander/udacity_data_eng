@@ -313,3 +313,19 @@ def compareQueryTimes(schema):
             "queryTime_" + schema: queryTimes,
         }
     ).set_index("query")
+
+
+noDistQueryTimes = compareQueryTimes("nodist")
+distQueryTimes = compareQueryTimes("dist")
+
+queryTimeDF = noDistQueryTimes.join(distQueryTimes)
+queryTimeDF.plot.bar()
+plt.show()
+
+improvementDF = queryTimeDF["distImprovement"] = (
+    100.0
+    * (queryTimeDF["queryTime_nodist"] - queryTimeDF["queryTime_dist"])
+    / queryTimeDF["queryTime_nodist"]
+)
+improvementDF.plot.bar(title="% dist Improvement by query")
+plt.show()
