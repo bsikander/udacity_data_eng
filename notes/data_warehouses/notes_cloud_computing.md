@@ -231,7 +231,6 @@ Rows **having similar values** are placed on the same slice.
   * Because the data is already sorted on the join key, the query optimizer can bypass the sort phase of the sort merge join.
 
 [AWS: Choose the Best Distribution Style](https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-best-dist-key.html)
-The goal in selecting a table distribution style is to minimize the impact of the redistribution step by locating the data where it needs to be before the query is executed.
 - **Distribute the fact table and one dimension table on their common columns**.
   * Your fact table can have only one distribution key.
   * Any tables that join on another key aren't collocated with the fact table.
