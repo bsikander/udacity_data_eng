@@ -180,15 +180,15 @@ Our IaC choice:
 - will create one IAM user called `dwhadmin`
   * will give admin privileges
   * will use its access token and secret to build our cluster and configure it, that should be our last "click-and-fill" process
-  
+
 ## Optimizing Table Design
 
-When a table is partitioned into many pieces and distributed across slices in different machines, **this is done blindly**. If one has an idea about the **frequent access pattern** of a table, one can choose a more clever strategy. 
+When a table is partitioned into many pieces and distributed across slices in different machines, **this is done blindly**. If one has an idea about the **frequent access pattern** of a table, one can choose a more clever strategy.
 
 ### Distribution Styles
 
 #### Distribution Style: Even
-**Round-robin** over all slices to achieve **load-balancing**. 
+**Round-robin** over all slices to achieve **load-balancing**.
 - Good if table won't be joined
 
 Distributing **facts and dimensions with EVEN** has a high cost of `JOIN`:
@@ -199,7 +199,7 @@ Distributing **facts and dimensions with EVEN** has a high cost of `JOIN`:
 - Small tables could be replicated on all slices to speed up joins
 - Used frequently for **dimension tables**, aka **broadcasting**
 
-Distributing **facts with EVEN** and **dimensions with ALL** eliminates shuffling. 
+Distributing **facts with EVEN** and **dimensions with ALL** eliminates shuffling.
 
 #### Distribution Style: Auto
 Leaves the decision to Redshift
@@ -207,7 +207,7 @@ Leaves the decision to Redshift
 - Large tables are distributed with `EVEN` strategy
 
 #### Distribution Style: Key
-Rows **having similar values** are placed on the same slice. 
+Rows **having similar values** are placed on the same slice.
 - can lead to a **skewed distribution** if some values of the dist key are more frequent than others
 - very useful when a dimension table is too big to be distributed with `ALL` strategy
   * in that case we distribute both the fact table and the dimension **using the same `distkey`**.
@@ -217,7 +217,7 @@ Rows **having similar values** are placed on the same slice.
 - one can define its columns as **sort key**
 - upon loading, rows are sorted before distribution to slices
 - minimizes the query time since each node already has contiguous ranges of rows based on the sorting key
-- **useful for columns that are used frequently in sorting** e.g. `ORDER BY`; like the date dimension and its corresponding foreign key in the fact table. 
+- **useful for columns that are used frequently in sorting** e.g. `ORDER BY`; like the date dimension and its corresponding foreign key in the fact table.
 
 #### References
 [AWS: Choose the Best Sort Key](https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-sort-key.html)
