@@ -19,8 +19,9 @@ CREATE TABLE IF NOT EXISTS "stg_events" (
     page VARCHAR,
     registration DOUBLE PRECISION,
     session_id INTEGER,
+    song VARCHAR,
     status INTEGER,
-    ts TIMESTAMP,
+    ts BIGINT,
     user_agent VARCHAR,
     user_id INTEGER
 );
@@ -101,28 +102,84 @@ CREATE TABLE IF NOT EXISTS "dim_time" (
 
 staging_events_copy = (
     """
+    COPY stg_events FROM {}
+    IAM_ROLE {}
+    FORMAT AS JSON {};
     """
-).format()
+).format(
+    config.get("S3", "LOG_DATA"),
+    config.get("IAM_ROLE", "ARN"),
+    config.get("S3", "LOG_JSONPATH"),
+)
+
 
 staging_songs_copy = (
     """
+    COPY stg_songs (artist_id, artist_latitude, artist_location, artist_longitude, artist_name, duration, num_songs, song_id, title, year)
+    FROM {}
+    IAM_ROLE {}
+    JSON 'auto';
     """
-).format()
+).format(config.get("S3", "SONG_DATA"), config.get("IAM_ROLE", "ARN"))
 
 # insert tables
 songplay_table_insert = """
+INSERT INTO fct_songplays (artist_id, level, location, session_id, song_id, start_time, user_agent, user_id)
+SELECT a.artist_id AS artist_id,
+       u.level AS level,
+       a.location AS location,
+       e.session_id AS session_id,
+       s.song_id AS song_id,
+       (TIMESTAMP 'epoch' + e.ts * INTERVAL '0.001 Second ') AS start_time,
+       e.user_agent AS user_agent,
+       e.user_id AS user_id
+FROM stg_events AS e
+LEFT JOIN dim_artists AS a ON (a.name = e.artist)
+LEFT JOIN dim_users AS u ON (u.user_id = e.user_id)
+LEFT JOIN dim_songs AS s ON (s.title = e.song)
+WHERE e.page = 'NextSong';
 """
 
 user_table_insert = """
+INSERT INTO dim_users (user_id, first_name, last_name, gender, level)
+SELECT DISTINCT(user_id) AS user_id,
+	   first_name AS first_name,
+       last_name AS last_name,
+       gender AS gender,
+       level AS level
+FROM stg_events WHERE user_id IS NOT NULL;
 """
 
 song_table_insert = """
+INSERT INTO dim_songs (artist_id, duration, song_id, title, year)
+SELECT artist_id AS artist_id,
+       cast(duration as double precision) AS duration,
+       coalesce(song_id, '') AS song_id,
+       coalesce(title, '') AS title,
+       year AS year
+FROM stg_songs;
 """
 
 artist_table_insert = """
+INSERT INTO dim_artists (artist_id, latitude, location, longitude, name)
+SELECT DISTINCT(artist_id) AS artist_id,
+       cast(artist_latitude as double precision) AS latitude,
+       coalesce(artist_location, '') AS location,
+       cast(artist_longitude as double precision) AS longitude,
+       artist_name AS name
+FROM stg_songs;
 """
 
 time_table_insert = """
+INSERT INTO dim_time (start_time, day, hour, month, week, weekday, year)
+SELECT (TIMESTAMP 'epoch' + ts * INTERVAL '0.001 Second') as start_time,
+       extract(day from start_time) as day,
+       extract(hour from start_time) as hour,
+       extract(month from start_time) as month,
+       extract(week from start_time) as week,
+       extract(weekday from start_time) as weekday,
+       extract(year from start_time) as year
+FROM stg_events;
 """
 
 # List of queries
@@ -152,7 +209,10 @@ drop_table_queries = [
     get_drop_table_query("dim_time"),
 ]
 
-copy_table_queries = [staging_events_copy, staging_songs_copy]
+copy_table_queries = [
+    staging_songs_copy,
+    staging_event_copy,
+]
 
 insert_table_queries = [
     songplay_table_insert,
