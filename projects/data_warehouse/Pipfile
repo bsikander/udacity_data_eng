@@ -4,12 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [packages]
-pyfunctional = "*"
 psycopg2 = "*"
-colorama = "*"
-pandas = "*"
-stringcase = "*"
-boto3 = "*"
 
 [dev-packages]
 ipdb = "*"
