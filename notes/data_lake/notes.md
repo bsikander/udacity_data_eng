@@ -76,4 +76,14 @@ Oftentimes when someone is talking about Hadoop in general terms, they are actua
 
 **Data streaming** is a specialized topic in big data. The use case is when you want to store and analyze data in real-time such as Facebook posts or Twitter tweets.
 - Spark has a streaming library called [**Spark Streaming**](https://spark.apache.org/docs/latest/streaming-programming-guide.html) although it is not as popular and fast as some other streaming libraries.
-- Other popular streaming libraries include [**Storm**](http://storm.apache.org/) and [**Flink**](https://flink.apache.org/). 
+- Other popular streaming libraries include [**Storm**](http://storm.apache.org/) and [**Flink**](https://flink.apache.org/).
+
+**Map Reduce**
+
+MapReduce is a programming technique for manipulating large data sets. "Hadoop MapReduce" is a specific implementation of this programming technique.
+
+The technique works by first dividing up a large dataset and distributing the data across a cluster. In the map step, each data is analyzed and converted into a (key, value) pair. Then these key-value pairs are shuffled across the cluster so that all keys are on the same machine. In the reduce step, the values with the same keys are combined together.
+
+While Spark doesn't implement MapReduce, you can write Spark programs that behave in a similar way to the map-reduce paradigm.
+
+
