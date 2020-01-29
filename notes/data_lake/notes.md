@@ -139,4 +139,20 @@ Sometimes it makes sense to use the power and simplicity of SQL on big data. For
 
 ### Data Wrangling with Spark
 
-- [lambda functions](http://palmstroem.blogspot.com/2012/05/lambda-calculus-for-absolute-dummies.html)
+read more on[lambda functions](http://palmstroem.blogspot.com/2012/05/lambda-calculus-for-absolute-dummies.html)
+
+e.g.
+```
+def convert_song_to_lowercase(song):
+    return song.lower()
+    
+distributed_song_log.map(convert_song_to_lowercase)
+
+PythonRDD[1] at RDD at PythonRDD.scala:53
+```
+
+- You'll notice that this code cell ran quite quickly. This is because of **lazy evaluation**.
+  * Spark does not actually execute the map step unless it needs to.
+- "**RDD**" in the output refers to **resilient distributed dataset**.
+  * RDDs are exactly what they say they are: fault-tolerant datasets distributed across a cluster. This is how Spark stores data.
+- To get Spark to actually run the map step, you need to use an "action". One available action is the collect method. The `collect()` method takes the results from all of the clusters and "collects" them into a single list on the master node.
