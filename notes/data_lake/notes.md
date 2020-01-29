@@ -139,7 +139,7 @@ Sometimes it makes sense to use the power and simplicity of SQL on big data. For
 
 ### Data Wrangling with Spark
 
-read more on[lambda functions](http://palmstroem.blogspot.com/2012/05/lambda-calculus-for-absolute-dummies.html)
+read more on [lambda functions](http://palmstroem.blogspot.com/2012/05/lambda-calculus-for-absolute-dummies.html)
 
 e.g.
 ```
@@ -156,3 +156,11 @@ PythonRDD[1] at RDD at PythonRDD.scala:53
 - "**RDD**" in the output refers to **resilient distributed dataset**.
   * RDDs are exactly what they say they are: fault-tolerant datasets distributed across a cluster. This is how Spark stores data.
 - To get Spark to actually run the map step, you need to use an "action". One available action is the collect method. The `collect()` method takes the results from all of the clusters and "collects" them into a single list on the master node.
+
+**Distributed Date Store**
+- [**HDFS**](https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html) - Hadoop Distributed File System
+  * splits files into 64 or 128 megabyte blocks and replicates these blocks across the cluster
+  * so data is stored in a **fault tolerant** way and can be accessed in digestible chunks
+- [Amazon S3](https://aws.amazon.com/s3/)
+
+
