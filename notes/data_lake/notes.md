@@ -163,4 +163,13 @@ PythonRDD[1] at RDD at PythonRDD.scala:53
   * so data is stored in a **fault tolerant** way and can be accessed in digestible chunks
 - [Amazon S3](https://aws.amazon.com/s3/)
 
+#### Imperative vs Declarative programming
+
+- Imperative Programming
+  * e.g. Spark Dataframes & Python
+  * "How"
+- Declarative Programming
+  * e.g. SQL
+  * "What"
+
 
