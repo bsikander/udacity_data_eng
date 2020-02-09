@@ -29,3 +29,18 @@ songs_in_hour = (
     .count()
     .orderBy(user_log.hour.cast("float"))
 )
+
+df = songs_in_hour.toPandas()
+plt.scatter(df["hour"], df["count"])
+plt.xlim(-1, 25)
+plt.ylim(0, 1.2 * max(df["count"]))
+plt.xlabel("hour")
+plt.ylabel("songs played")
+
+user_log_valid = user_log.dropna(how="any", subset=["userId", "sessionId"])
+user_log.count()
+user_log_valid.count()
+
+user_log_valid.filter("page = 'Submit Downgrade'").show()
+flag_downgrade_event = udf(lambda x: 1 if x == "Submit Downgrade" else 0, IntegerType())
+user_log_valid.withColumn("downgraded", flag_downgrade_event(user_log_valid.page))
