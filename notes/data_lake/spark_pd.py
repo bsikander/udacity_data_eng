@@ -20,3 +20,5 @@ user_log.select(["userId", "firstname", "page", "song"]).where(
 ).collect()
 
 # convert time from epoch to datetime
+get_hour = udf(lambda x: datetime.datetime.fromtimestamp(x / 1000.0).hour)
+user_log = user_log.withColumn("hour", get_hour(user_log.ts))

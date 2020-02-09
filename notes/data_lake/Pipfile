@@ -8,6 +8,7 @@ black = "*"
 
 [packages]
 pyspark = "*"
+pandas = "*"
 findspark = "*"
 matplotlib = "*"
 
