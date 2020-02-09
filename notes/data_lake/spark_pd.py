@@ -22,3 +22,10 @@ user_log.select(["userId", "firstname", "page", "song"]).where(
 # convert time from epoch to datetime
 get_hour = udf(lambda x: datetime.datetime.fromtimestamp(x / 1000.0).hour)
 user_log = user_log.withColumn("hour", get_hour(user_log.ts))
+
+songs_in_hour = (
+    user_log.filter(user_log.page == "NextSong")
+    .groupby(user_log.hour)
+    .count()
+    .orderBy(user_log.hour.cast("float"))
+)

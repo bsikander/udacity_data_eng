@@ -145,7 +145,7 @@ e.g.
 ```
 def convert_song_to_lowercase(song):
     return song.lower()
-    
+
 distributed_song_log.map(convert_song_to_lowercase)
 
 PythonRDD[1] at RDD at PythonRDD.scala:53
@@ -171,5 +171,3 @@ PythonRDD[1] at RDD at PythonRDD.scala:53
 - Declarative Programming
   * e.g. SQL
   * "What"
-
-
