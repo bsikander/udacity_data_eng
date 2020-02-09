@@ -171,3 +171,33 @@ PythonRDD[1] at RDD at PythonRDD.scala:53
 - Declarative Programming
   * e.g. SQL
   * "What"
+
+
+#### Data Wrangling with DataFrames 
+
+**General functions**
+- `select()`
+- `filter()`
+- `where()`
+- `sort()`
+- `dropDuplicates()`
+- `withColumn()`
+
+**Aggregate functions**
+- Spark SQL provides built-in methods for the most common aggregations such as `count()`, `countDistinct()`, `avg()`, `max()`, `min()`, etc. in the `pyspark.sql.functions` module.
+  * These methods are not the same as the built-in methods in the Python Standard Library, where we can find `min()` for example as well, hence you need to be careful not to use them interchangeably.
+- In many cases, there are multiple ways to express the same aggregations.
+  * For example, if we would like to compute one type of aggregate for one or more columns of the DataFrame we can just simply chain the aggregate method after a `groupBy()`.
+  * If we would like to use different functions on different columns, `agg()` comes in handy. For example `agg({"salary": "avg", "age": "max"})` computes the average salary and maximum age.
+
+**User defined functions (UDF)**
+- In Spark SQL we can define our own functions with the udf method from the `pyspark.sql.function`s module.
+- The default type of the returned variable for UDFs is string. If we would like to return an other type we need to explicitly do so by using the different types from the `pyspark.sql.types` module.
+
+**Window functions**
+- Window functions are a way of **combining the values of ranges of rows in a DataFrame**.
+- When defining the window we can choose:
+  * how to **sort** and **group** (with the `partitionBy` method) the rows, and
+  * how wide of a window we'd like to use (described by `rangeBetween` or `rowsBetween`).
+  
+For further information see the [Spark SQL, DataFrames and Datasets Guide](https://spark.apache.org/docs/latest/sql-programming-guide.html) and the [Spark Python API Docs](https://spark.apache.org/docs/latest/api/python/index.html).
