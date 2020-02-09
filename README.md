@@ -7,7 +7,7 @@ this repo contains my study notes & projects for udacity's [data engineering nan
   * submitted & passed
 
 ## cloud data warehouses
-* [ ] project: data warehouses. due **jan 3, 2020**.
+* [x] project: data warehouses. due **jan 3, 2020**.
 
 ## data lakes with spark
 * [ ] project: data lake. due **jan 30, 2020**
