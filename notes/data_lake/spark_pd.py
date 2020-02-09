@@ -1,12 +1,11 @@
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, Window
 from pyspark.sql.functions import asc, desc, udf
 from pyspark.sql.functions import sum as Fsum
 from pyspark.sql.types import IntegerType, StringType
 
 import datetime
 
-import numpy as np
-import pandas as pd
+import pandas
 import matplotlib.pyplot as plt
 
 path = "hdfs://ec2-34-218-86-174.us-west-2.compute.amazonaws.com:9000/sparkify/sparkify_log_small.json"
@@ -43,4 +42,16 @@ user_log_valid.count()
 
 user_log_valid.filter("page = 'Submit Downgrade'").show()
 flag_downgrade_event = udf(lambda x: 1 if x == "Submit Downgrade" else 0, IntegerType())
-user_log_valid.withColumn("downgraded", flag_downgrade_event(user_log_valid.page))
+user_log_valid.withColumn("downgraded", flag_downgrade_event("page"))
+user_log_valid.head()
+
+# have a phase value desending from N to 0, where N is the number of phases
+windowval = (
+    Window.partitionBy("userId")
+    .orderBy(desc("ts"))
+    .rangeBetween(Window.unboundedPrecedings, 0)
+)
+user_log_valid.withColumn("phase", Fsum("downgraded").over(windowval))
+user_log_valid.select(["userId", "firstname", "page", "level", "song"]).where(
+    user_log.userId == "1046"
+).sort("ts").collect()
