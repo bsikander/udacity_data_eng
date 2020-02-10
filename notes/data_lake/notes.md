@@ -201,3 +201,7 @@ PythonRDD[1] at RDD at PythonRDD.scala:53
   * how wide of a window we'd like to use (described by `rangeBetween` or `rowsBetween`).
 
 For further information see the [Spark SQL, DataFrames and Datasets Guide](https://spark.apache.org/docs/latest/sql-programming-guide.html) and the [Spark Python API Docs](https://spark.apache.org/docs/latest/api/python/index.html).
+
+#### Spark SQL
+- [Spark SQL built-in functions](https://spark.apache.org/docs/latest/api/sql/index.html)
+- [Spark SQL Guide](https://spark.apache.org/docs/latest/api/sql/index.html)
