@@ -5,7 +5,7 @@ from pyspark.sql.types import IntegerType, StringType
 
 import datetime
 
-import pandas
+import pandas as pd
 import matplotlib.pyplot as plt
 
 path = "hdfs://ec2-34-218-86-174.us-west-2.compute.amazonaws.com:9000/sparkify/sparkify_log_small.json"
@@ -30,12 +30,14 @@ songs_in_hour = (
 )
 
 df = songs_in_hour.toPandas()
+df.hour = pd.to_numeric(df.hour)
 plt.scatter(df["hour"], df["count"])
 plt.xlim(-1, 25)
 plt.ylim(0, 1.2 * max(df["count"]))
 plt.xlabel("hour")
 plt.ylabel("songs played")
 
+user_log.select("userId").dropDuplicates().sort("userId").show()
 user_log_valid = user_log.dropna(how="any", subset=["userId", "sessionId"])
 user_log.count()
 user_log_valid.count()
