@@ -205,3 +205,12 @@ For further information see the [Spark SQL, DataFrames and Datasets Guide](https
 #### Spark SQL
 - [Spark SQL built-in functions](https://spark.apache.org/docs/latest/api/sql/index.html)
 - [Spark SQL Guide](https://spark.apache.org/docs/latest/api/sql/index.html)
+
+#### RDDs
+- Spark's query optimizer is called **Catalyst**
+- **RDD**s, or **Resilient Distributed Data Set** are a low-level abstraction of the data. 
+  * In the first version of Spark, you worked directly with RDDs.
+  * You can think of RDDs as long lists distributed across various machines. 
+  * You can still use RDDs as part of your Spark code although data frames and SQL are easier. 
+- You can find some further explanation of the difference between RDDs and DataFrames in Databricks' [A Tale of Three Apache Spark APIs: RDDs, DataFrames, and Datasets](https://databricks.com/blog/2016/07/14/a-tale-of-three-apache-spark-apis-rdds-dataframes-and-datasets.html) blog post.
+- Here is a link to the Spark documentation's [RDD programming guide](https://spark.apache.org/docs/latest/rdd-programming-guide.html).
