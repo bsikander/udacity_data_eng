@@ -173,7 +173,7 @@ PythonRDD[1] at RDD at PythonRDD.scala:53
   * "What"
 
 
-#### Data Wrangling with DataFrames
+### Data Wrangling with DataFrames
 
 **General functions**
 - `select()`
@@ -214,3 +214,13 @@ For further information see the [Spark SQL, DataFrames and Datasets Guide](https
   * You can still use RDDs as part of your Spark code although data frames and SQL are easier. 
 - You can find some further explanation of the difference between RDDs and DataFrames in Databricks' [A Tale of Three Apache Spark APIs: RDDs, DataFrames, and Datasets](https://databricks.com/blog/2016/07/14/a-tale-of-three-apache-spark-apis-rdds-dataframes-and-datasets.html) blog post.
 - Here is a link to the Spark documentation's [RDD programming guide](https://spark.apache.org/docs/latest/rdd-programming-guide.html).
+
+### Debugging & Optimization
+
+- Work with distributed data
+- Spark Web UI
+- Optimize code for efficiency
+
+**From Local Mode to Cluster Mode**
+- Common Spark issues
+
