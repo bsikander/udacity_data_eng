@@ -220,7 +220,11 @@ For further information see the [Spark SQL, DataFrames and Datasets Guide](https
 - Work with distributed data
 - Spark Web UI
 - Optimize code for efficiency
-
-**From Local Mode to Cluster Mode**
 - Common Spark issues
 
+**From Local Mode to Cluster Mode**
+
+Spark Cluster Managers:
+- Standalone Mode
+- MESOS
+- YARN
