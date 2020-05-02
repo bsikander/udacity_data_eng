@@ -222,6 +222,7 @@ If I am trying to do analysis, such as determining a trend over time, e.g., how 
 - ALWAYS think **queries** first
 - *One table per query* is a great strategy
 - Apache Cassandra **does not allow for JOINs between tables**
+- No Group By, JOINS or sub queries possible with CQL
 
 #### Primary Key
 - Must be *unique*
