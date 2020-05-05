@@ -2,6 +2,14 @@
 
 ## Hardware
 
+- SEE Screenshots for more numbers
+
+## Vids
+- [RAM] https://www.youtube.com/watch?v=Gx0_7CUFInM
+- [RAM] https://www.youtube.com/watch?v=Wvz1UeYkjsw
+- [CPU] https://www.youtube.com/watch?v=LNv-urROvr0
+- [Storage] https://www.youtube.com/watch?v=3nL6JM3QbQQ
+
 #### CPU (Central Processing Unit)
 - The CPU is the "brain" of the computer.
 - Every process on your computer is eventually handled by your CPU.
