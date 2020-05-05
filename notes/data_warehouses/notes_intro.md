@@ -16,6 +16,8 @@ DW goals:
 - handles new questions well
 - secure
 
+[PDF](http://archive.oreilly.com/oreillyschool/courses/dba3/DBA%203%20Creating%20a%20Data%20Warehouse%20v1.pdf)
+
 ## Dimensional Modeling
 
 Goals:
