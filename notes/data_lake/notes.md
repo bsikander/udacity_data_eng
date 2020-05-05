@@ -150,6 +150,7 @@ Sometimes it makes sense to use the power and simplicity of SQL on big data. For
 
 
 ### Data Wrangling with Spark
+- Spark uses functional programming to take advantage of pure functions
 
 read more on [lambda functions](http://palmstroem.blogspot.com/2012/05/lambda-calculus-for-absolute-dummies.html)
 
