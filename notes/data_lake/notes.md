@@ -9,6 +9,8 @@
 - [RAM] https://www.youtube.com/watch?v=Wvz1UeYkjsw
 - [CPU] https://www.youtube.com/watch?v=LNv-urROvr0
 - [Storage] https://www.youtube.com/watch?v=3nL6JM3QbQQ
+- [Big data1] https://www.youtube.com/watch?v=QjPr7qeJTQk
+- [Big data2] https://www.youtube.com/watch?v=314zCU4O-f4
 
 #### CPU (Central Processing Unit)
 - The CPU is the "brain" of the computer.
