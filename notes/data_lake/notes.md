@@ -11,6 +11,7 @@
 - [Storage] https://www.youtube.com/watch?v=3nL6JM3QbQQ
 - [Big data1] https://www.youtube.com/watch?v=QjPr7qeJTQk
 - [Big data2] https://www.youtube.com/watch?v=314zCU4O-f4
+- [Medium data] https://www.youtube.com/watch?v=5E0VLIhch6I
 
 #### CPU (Central Processing Unit)
 - The CPU is the "brain" of the computer.
@@ -56,7 +57,7 @@ The *speed of our network* has lagged behind the improvments in CPU memory and s
 
 ## History of Distributed and Parallel Computing
 - At a high level, distributed computing implies multiple CPUs each with its own memory.
-- Parallel computing uses multiple CPUs sharing the same memory.
+- Parallel computing uses multiple CPUs sharing the same memory. (https://www.youtube.com/watch?v=9CRZURNg2zs)
 
 ### Hadoop
 - **Hadoop**: an ecosystem of tools for big data storage and data analysis.
