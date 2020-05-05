@@ -12,6 +12,7 @@
 - [Big data1] https://www.youtube.com/watch?v=QjPr7qeJTQk
 - [Big data2] https://www.youtube.com/watch?v=314zCU4O-f4
 - [Medium data] https://www.youtube.com/watch?v=5E0VLIhch6I
+- [Functional Programming] https://www.youtube.com/watch?v=jSwfZ8wks_E
 
 #### CPU (Central Processing Unit)
 - The CPU is the "brain" of the computer.
