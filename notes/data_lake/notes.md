@@ -241,3 +241,15 @@ Spark Cluster Managers:
 - Standalone Mode
 - MESOS
 - YARN
+
+### Data Lake
+Data warehouse is already enough for most of the orgs and is the prefered way but there are reason for datalake
+- Unstructured data
+- Data volume
+- New type of analysis emerging e.g. predictive analytics
+- New tools like Hadoop/Spark opened more powerful ways to analyze
+
+##### Unstructured data in class warehouse
+- Possible but difficult
+- ETL process can convert JSON to tabular format. Deep nested json can be an issue.
+- Text/pdf can be stored as blob in the DW but mostly useless
