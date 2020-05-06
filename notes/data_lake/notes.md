@@ -277,3 +277,8 @@ Data lake shares the goals of data warehouse for supporting business in their da
 
 
 ![alt text](https://github.com/bsikander/udacity_data_eng/blob/master/notes/data_lake/Screen%20Shot%202020-05-06%20at%2015.01.57.png)
+
+##### Data Lake concepts
+- ELT -> First we load and then transform
+- In DW, before starting ETL, you had to know the destination format. In big data, it is not required because we have storage.
+
