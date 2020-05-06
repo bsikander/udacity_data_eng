@@ -266,3 +266,5 @@ Data lake shares the goals of data warehouse for supporting business in their da
 - Low cost of storage
 - Moving ETL to big data became clear
 - Big data clusters can do ETL + data storage and can relief DW from the storage burden. Generally the data which was too heavy for DW can now be stored in big data cluster.
+
+![alt text](https://github.com/bsikander/udacity_data_eng/blob/master/notes/data_lake/Screen%20Shot%202020-05-06%20at%2015.01.57.png)
