@@ -253,3 +253,16 @@ Data warehouse is already enough for most of the orgs and is the prefered way bu
 - Possible but difficult
 - ETL process can convert JSON to tabular format. Deep nested json can be an issue.
 - Text/pdf can be stored as blob in the DW but mostly useless
+
+##### Schema On Read vs Schema On Write
+- Load a csv and already start querying
+
+```
+Data lake is the new data warehouse
+```
+Data lake shares the goals of data warehouse for supporting business in their day to day activities beyond transactional.
+
+##### Big Data effect on DW
+- Low cost of storage
+- Moving ETL to big data became clear
+- Big data clusters can do ETL + data storage and can relief DW from the storage burden. Generally the data which was too heavy for DW can now be stored in big data cluster.
