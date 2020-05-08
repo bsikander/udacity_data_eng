@@ -58,3 +58,12 @@ https://www.youtube.com/watch?v=-ravmjI7RYk
 - Data must arrive within a given timeframe from the start of execution
 - Pipelines must run on a particular schedule
 - Data must not contain any sensitive information
+
+#### Airflow Plugins
+Airflow was built with the intention of allowing its users to extend and customize its functionality through plugins. The most common types of user-created plugins for Airflow are Operators and Hooks. These plugins make DAGs reusable and simpler to maintain.
+
+To create custom operator, follow the steps:
+
+Identify Operators that perform similar functions and can be consolidated
+Define a new Operator in the plugins folder
+Replace the original Operators with your new custom one, re-parameterize, and instantiate them.
