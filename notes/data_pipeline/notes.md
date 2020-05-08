@@ -12,3 +12,30 @@
 
 
 ![alt text](https://github.com/bsikander/udacity_data_eng/blob/master/notes/data_pipeline/Screen%20Shot%202020-05-08%20at%2017.18.18.png)
+
+#### Operators
+Operators define the atomic steps of work that make up a DAG. Airflow comes with many Operators that can perform common operations. Here are a handful of common ones:
+
+PythonOperator
+PostgresOperator
+RedshiftToS3Operator
+S3ToRedshiftOperator
+BashOperator
+SimpleHttpOperator
+Sensor
+
+#### Task Dependencies
+In Airflow DAGs:
+
+Nodes = Tasks
+Edges = Ordering and dependencies between tasks
+Task dependencies can be described programmatically in Airflow using >> and <<
+```
+a >> b means a comes before b
+a << b means a comes after b
+```
+Tasks dependencies can also be set with “set_downstream” and “set_upstream”
+```
+a.set_downstream(b) means a comes before b
+a.set_upstream(b) means a comes after b
+```
